@@ -53,7 +53,16 @@ export default function AdminGuests() {
     try {
       const auth = localStorage.getItem('adminAuth')
       const [username, password] = atob(auth).split(':')
-      await api.post('/api/admin/guests', formData, {
+      
+      // Ensure room_id is an integer
+      const guestData = {
+        ...formData,
+        room_id: parseInt(formData.room_id),
+        guests: parseInt(formData.guests),
+        extra_breakfast: parseInt(formData.extra_breakfast) || 0
+      }
+      
+      await api.post('/api/admin/guests', guestData, {
         headers: { username, password }
       })
       setShowAddModal(false)
@@ -62,8 +71,11 @@ export default function AdminGuests() {
         check_in: '', check_out: '', guests: 1, breakfast: true, extra_breakfast: 0, laundry: false
       })
       fetchGuests()
+      alert('Guest added successfully!')
     } catch (error) {
-      alert('Error adding guest')
+      console.error('Add guest error:', error)
+      const errorMsg = error.response?.data?.error || error.message || 'Error adding guest'
+      alert(`Error adding guest: ${errorMsg}`)
     }
   }
 
