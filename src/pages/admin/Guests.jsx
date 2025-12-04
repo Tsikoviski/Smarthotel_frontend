@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import api from '../../api/axios'
-import { Plus, X, Trash2, FileText, Share2 } from 'lucide-react'
+import { Plus, X, Trash2, FileText, Share2, Printer } from 'lucide-react'
+import { printThermalReceipt } from '../../utils/thermalPrinter'
 
 export default function AdminGuests() {
   const [guests, setGuests] = useState([])
@@ -95,8 +96,39 @@ export default function AdminGuests() {
       setSelectedGuest(null)
       setRemovalReason('')
       fetchGuests()
+      alert('Guest marked as removed')
     } catch (error) {
       alert('Error removing guest')
+    }
+  }
+
+  const handleCheckout = async (guestId) => {
+    if (!confirm('Mark this guest as checked out?')) return
+    try {
+      const auth = localStorage.getItem('adminAuth')
+      const [username, password] = atob(auth).split(':')
+      await api.put(`/api/admin/guests/${guestId}/checkout`, {}, {
+        headers: { username, password }
+      })
+      fetchGuests()
+      alert('Guest checked out successfully')
+    } catch (error) {
+      alert('Error checking out guest')
+    }
+  }
+
+  const handlePermanentDelete = async (guestId) => {
+    if (!confirm('PERMANENTLY delete this guest? This cannot be undone!')) return
+    try {
+      const auth = localStorage.getItem('adminAuth')
+      const [username, password] = atob(auth).split(':')
+      await api.delete(`/api/admin/guests/${guestId}/permanent`, {
+        headers: { username, password }
+      })
+      fetchGuests()
+      alert('Guest permanently deleted')
+    } catch (error) {
+      alert('Error deleting guest')
     }
   }
 
@@ -239,6 +271,13 @@ Thank you for choosing Elkad Lodge!
                 <td className="p-3">
                   <div className="flex items-center space-x-2">
                     <button 
+                      onClick={() => printThermalReceipt(guest)}
+                      className="text-indigo-600 hover:text-indigo-800"
+                      title="Print Receipt (Thermal Printer)"
+                    >
+                      <Printer size={18} />
+                    </button>
+                    <button 
                       onClick={() => downloadReceipt(guest)}
                       className="text-blue-600 hover:text-blue-800"
                       title="Download Receipt"
@@ -253,17 +292,33 @@ Thank you for choosing Elkad Lodge!
                       <Share2 size={18} />
                     </button>
                     {guest.status === 'active' && (
-                      <button 
-                        onClick={() => {
-                          setSelectedGuest(guest)
-                          setShowRemoveModal(true)
-                        }}
-                        className="text-red-600 hover:text-red-800"
-                        title="Remove Guest"
-                      >
-                        <Trash2 size={18} />
-                      </button>
+                      <>
+                        <button 
+                          onClick={() => handleCheckout(guest.id)}
+                          className="text-purple-600 hover:text-purple-800 text-xs px-2 py-1 border border-purple-600 rounded"
+                          title="Checkout Guest"
+                        >
+                          Checkout
+                        </button>
+                        <button 
+                          onClick={() => {
+                            setSelectedGuest(guest)
+                            setShowRemoveModal(true)
+                          }}
+                          className="text-orange-600 hover:text-orange-800"
+                          title="Remove Guest (with reason)"
+                        >
+                          <Trash2 size={18} />
+                        </button>
+                      </>
                     )}
+                    <button 
+                      onClick={() => handlePermanentDelete(guest.id)}
+                      className="text-red-600 hover:text-red-800"
+                      title="Delete Permanently"
+                    >
+                      <X size={18} />
+                    </button>
                   </div>
                 </td>
               </tr>

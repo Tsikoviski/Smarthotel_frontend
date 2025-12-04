@@ -44,10 +44,16 @@ export default function Rooms() {
               </div>
               <div className="p-6">
                 <h3 className="text-2xl font-bold mb-2">{room.name}</h3>
-                <div className="text-3xl font-bold text-primary mb-4">
+                <div className="text-3xl font-bold text-primary mb-2">
                   GH₵ {room.price}
                   <span className="text-sm text-gray-600 font-normal">/night</span>
                 </div>
+                
+                {room.quantity && (
+                  <div className="text-sm font-semibold text-green-600 mb-3">
+                    {room.quantity} room{room.quantity > 1 ? 's' : ''} available
+                  </div>
+                )}
                 
                 <p className="text-gray-600 mb-4">{room.description}</p>
                 

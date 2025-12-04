@@ -5,7 +5,7 @@ export default function AdminRooms() {
   const [rooms, setRooms] = useState([])
   const [editing, setEditing] = useState(null)
   const [formData, setFormData] = useState({
-    name: '', description: '', price: '', max_guests: '', image_url: '', available: true
+    name: '', description: '', price: '', max_guests: '', image_url: '', available: true, quantity: 1
   })
 
   useEffect(() => {
@@ -41,9 +41,10 @@ export default function AdminRooms() {
         })
       }
       
-      setFormData({ name: '', description: '', price: '', max_guests: '', image_url: '', available: true })
+      setFormData({ name: '', description: '', price: '', max_guests: '', image_url: '', available: true, quantity: 1 })
       setEditing(null)
       fetchRooms()
+      alert('Room saved successfully!')
     } catch (error) {
       alert('Error saving room')
     }
@@ -51,7 +52,7 @@ export default function AdminRooms() {
 
   const handleEdit = (room) => {
     setEditing(room.id)
-    setFormData(room)
+    setFormData({...room, quantity: room.quantity || 1})
   }
 
   const handleDelete = async (id) => {
@@ -100,11 +101,20 @@ export default function AdminRooms() {
             required
           />
           <input 
+            type="number" 
+            placeholder="Quantity Available"
+            value={formData.quantity}
+            onChange={(e) => setFormData({...formData, quantity: e.target.value})}
+            className="p-2 border rounded"
+            required
+            min="1"
+          />
+          <input 
             type="text" 
             placeholder="Image URL"
             value={formData.image_url}
             onChange={(e) => setFormData({...formData, image_url: e.target.value})}
-            className="p-2 border rounded"
+            className="p-2 border rounded md:col-span-2"
           />
           <textarea 
             placeholder="Description"
@@ -122,7 +132,7 @@ export default function AdminRooms() {
                 type="button" 
                 onClick={() => {
                   setEditing(null)
-                  setFormData({ name: '', description: '', price: '', max_guests: '', image_url: '', available: true })
+                  setFormData({ name: '', description: '', price: '', max_guests: '', image_url: '', available: true, quantity: 1 })
                 }}
                 className="btn-secondary"
               >
@@ -138,8 +148,11 @@ export default function AdminRooms() {
           <div key={room.id} className="card p-6">
             <h3 className="text-xl font-bold mb-2">{room.name}</h3>
             <p className="text-gray-600 mb-2">{room.description}</p>
-            <div className="text-2xl font-bold text-primary mb-4">GH₵ {room.price}/night</div>
-            <div className="text-sm text-gray-600 mb-4">Max Guests: {room.max_guests}</div>
+            <div className="text-2xl font-bold text-primary mb-2">GH₵ {room.price}/night</div>
+            <div className="text-sm text-gray-600 mb-1">Max Guests: {room.max_guests}</div>
+            <div className="text-sm font-semibold text-green-600 mb-4">
+              Available: {room.quantity || 1} room{(room.quantity || 1) > 1 ? 's' : ''}
+            </div>
             <div className="flex space-x-2">
               <button onClick={() => handleEdit(room)} className="btn-primary text-sm">Edit</button>
               <button onClick={() => handleDelete(room.id)} className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 text-sm">Delete</button>
