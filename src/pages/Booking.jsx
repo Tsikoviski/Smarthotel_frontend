@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Calendar, Users, CreditCard } from 'lucide-react'
-import axios from 'axios'
+import api from '../api/axios'
 
 export default function Booking() {
   const location = useLocation()
@@ -30,7 +30,7 @@ export default function Booking() {
 
   const fetchRooms = async () => {
     try {
-      const response = await axios.get('/api/rooms')
+      const response = await api.get('/api/rooms')
       setRooms(response.data)
     } catch (error) {
       console.error('Error fetching rooms:', error)
@@ -57,7 +57,7 @@ export default function Booking() {
     setLoading(true)
 
     try {
-      const response = await axios.post('/api/bookings', formData)
+      const response = await api.post('/api/bookings', formData)
       const { booking, paymentUrl } = response.data
       
       // Redirect to Paystack payment page

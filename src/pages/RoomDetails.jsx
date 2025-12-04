@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { Users, Wifi, Coffee, Wind, Utensils, Film, Shirt } from 'lucide-react'
-import axios from 'axios'
+import api from '../api/axios'
 
 export default function RoomDetails() {
   const { id } = useParams()
@@ -15,7 +15,7 @@ export default function RoomDetails() {
 
   const fetchRoom = async () => {
     try {
-      const response = await axios.get(`/api/rooms/${id}`)
+      const response = await api.get(`/api/rooms/${id}`)
       setRoom(response.data)
     } catch (error) {
       console.error('Error fetching room:', error)

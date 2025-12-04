@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
+import api from '../../api/axios'
 
 export default function AdminBookings() {
   const [bookings, setBookings] = useState([])
@@ -13,7 +13,7 @@ export default function AdminBookings() {
     try {
       const auth = localStorage.getItem('adminAuth')
       const [username, password] = atob(auth).split(':')
-      const response = await axios.get('/api/admin/bookings', {
+      const response = await api.get('/api/admin/bookings', {
         headers: { username, password }
       })
       setBookings(response.data)
@@ -28,7 +28,7 @@ export default function AdminBookings() {
     try {
       const auth = localStorage.getItem('adminAuth')
       const [username, password] = atob(auth).split(':')
-      await axios.put(`/api/admin/bookings/${id}`, 
+      await api.put(`/api/admin/bookings/${id}`, 
         { payment_status: status },
         { headers: { username, password } }
       )

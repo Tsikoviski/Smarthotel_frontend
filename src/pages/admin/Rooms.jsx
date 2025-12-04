@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
+import api from '../../api/axios'
 
 export default function AdminRooms() {
   const [rooms, setRooms] = useState([])
@@ -16,7 +16,7 @@ export default function AdminRooms() {
     try {
       const auth = localStorage.getItem('adminAuth')
       const [username, password] = atob(auth).split(':')
-      const response = await axios.get('/api/admin/rooms', {
+      const response = await api.get('/api/admin/rooms', {
         headers: { username, password }
       })
       setRooms(response.data)
@@ -32,11 +32,11 @@ export default function AdminRooms() {
       const [username, password] = atob(auth).split(':')
       
       if (editing) {
-        await axios.put(`/api/admin/rooms/${editing}`, formData, {
+        await api.put(`/api/admin/rooms/${editing}`, formData, {
           headers: { username, password }
         })
       } else {
-        await axios.post('/api/admin/rooms', formData, {
+        await api.post('/api/admin/rooms', formData, {
           headers: { username, password }
         })
       }
@@ -59,7 +59,7 @@ export default function AdminRooms() {
     try {
       const auth = localStorage.getItem('adminAuth')
       const [username, password] = atob(auth).split(':')
-      await axios.delete(`/api/admin/rooms/${id}`, {
+      await api.delete(`/api/admin/rooms/${id}`, {
         headers: { username, password }
       })
       fetchRooms()

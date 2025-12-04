@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
+import api from '../../api/axios'
 import { TrendingUp, Users, DollarSign, Bed, Download } from 'lucide-react'
 
 export default function Analytics() {
@@ -18,7 +18,7 @@ export default function Analytics() {
     try {
       const auth = localStorage.getItem('adminAuth')
       const [username, password] = atob(auth).split(':')
-      const response = await axios.get('/api/admin/analytics', {
+      const response = await api.get('/api/admin/analytics', {
         headers: { username, password }
       })
       setAnalytics(response.data)
@@ -33,7 +33,7 @@ export default function Analytics() {
     try {
       const auth = localStorage.getItem('adminAuth')
       const [username, password] = atob(auth).split(':')
-      const response = await axios.get('/api/admin/guests', {
+      const response = await api.get('/api/admin/guests', {
         headers: { username, password }
       })
       setGuests(response.data)
@@ -46,7 +46,7 @@ export default function Analytics() {
     try {
       const auth = localStorage.getItem('adminAuth')
       const [username, password] = atob(auth).split(':')
-      const response = await axios.get('/api/admin/bookings', {
+      const response = await api.get('/api/admin/bookings', {
         headers: { username, password }
       })
       setBookings(response.data)

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import axios from 'axios'
+import api from '../../api/axios'
 
 export default function AdminLogin() {
   const navigate = useNavigate()
@@ -10,7 +10,7 @@ export default function AdminLogin() {
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
-      const response = await axios.post('/api/admin/login', credentials)
+      const response = await api.post('/api/admin/login', credentials)
       localStorage.setItem('admin', JSON.stringify(response.data.admin))
       localStorage.setItem('adminAuth', btoa(`${credentials.username}:${credentials.password}`))
       

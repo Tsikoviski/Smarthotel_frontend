@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
+import api from '../../api/axios'
 import { Plus, X, Trash2 } from 'lucide-react'
 
 export default function AdminGuests() {
@@ -24,7 +24,7 @@ export default function AdminGuests() {
     try {
       const auth = localStorage.getItem('adminAuth')
       const [username, password] = atob(auth).split(':')
-      const response = await axios.get('/api/admin/guests', {
+      const response = await api.get('/api/admin/guests', {
         headers: { username, password }
       })
       setGuests(response.data)
@@ -39,7 +39,7 @@ export default function AdminGuests() {
     try {
       const auth = localStorage.getItem('adminAuth')
       const [username, password] = atob(auth).split(':')
-      const response = await axios.get('/api/admin/rooms', {
+      const response = await api.get('/api/admin/rooms', {
         headers: { username, password }
       })
       setRooms(response.data)
@@ -53,7 +53,7 @@ export default function AdminGuests() {
     try {
       const auth = localStorage.getItem('adminAuth')
       const [username, password] = atob(auth).split(':')
-      await axios.post('/api/admin/guests', formData, {
+      await api.post('/api/admin/guests', formData, {
         headers: { username, password }
       })
       setShowAddModal(false)
@@ -75,7 +75,7 @@ export default function AdminGuests() {
     try {
       const auth = localStorage.getItem('adminAuth')
       const [username, password] = atob(auth).split(':')
-      await axios.delete(`/api/admin/guests/${selectedGuest.id}`, {
+      await api.delete(`/api/admin/guests/${selectedGuest.id}`, {
         headers: { username, password },
         data: { reason: removalReason }
       })

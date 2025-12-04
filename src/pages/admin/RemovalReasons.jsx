@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
+import api from '../../api/axios'
 import { AlertCircle } from 'lucide-react'
 
 export default function RemovalReasons() {
@@ -16,7 +16,7 @@ export default function RemovalReasons() {
     try {
       const auth = localStorage.getItem('adminAuth')
       const [username, password] = atob(auth).split(':')
-      const response = await axios.get('/api/admin/removal-reasons', {
+      const response = await api.get('/api/admin/removal-reasons', {
         headers: { username, password }
       })
       setReasons(response.data)
@@ -31,7 +31,7 @@ export default function RemovalReasons() {
     try {
       const auth = localStorage.getItem('adminAuth')
       const [username, password] = atob(auth).split(':')
-      const response = await axios.get('/api/admin/guests', {
+      const response = await api.get('/api/admin/guests', {
         headers: { username, password }
       })
       setGuests(response.data)
