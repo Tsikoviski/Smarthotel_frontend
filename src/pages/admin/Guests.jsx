@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import api from '../../api/axios'
-import { Plus, X, Trash2 } from 'lucide-react'
+import { Plus, X, Trash2, FileText, Share2 } from 'lucide-react'
 
 export default function AdminGuests() {
   const [guests, setGuests] = useState([])
@@ -12,7 +12,7 @@ export default function AdminGuests() {
   const [removalReason, setRemovalReason] = useState('')
   const [formData, setFormData] = useState({
     name: '', phone: '', email: '', room_id: '', 
-    check_in: '', check_out: '', guests: 1, breakfast: true
+    check_in: '', check_out: '', guests: 1, breakfast: true, extra_breakfast: 0, laundry: false
   })
 
   useEffect(() => {
@@ -59,7 +59,7 @@ export default function AdminGuests() {
       setShowAddModal(false)
       setFormData({
         name: '', phone: '', email: '', room_id: '', 
-        check_in: '', check_out: '', guests: 1, breakfast: true
+        check_in: '', check_out: '', guests: 1, breakfast: true, extra_breakfast: 0, laundry: false
       })
       fetchGuests()
     } catch (error) {
@@ -88,6 +88,88 @@ export default function AdminGuests() {
     }
   }
 
+  const generateReceipt = (guest) => {
+    const checkIn = new Date(guest.check_in)
+    const checkOut = new Date(guest.check_out)
+    const nights = Math.ceil((checkOut - checkIn) / (1000 * 60 * 60 * 24))
+    
+    const receipt = `
+╔════════════════════════════════════════╗
+║         ELKAD LODGE RECEIPT            ║
+╚════════════════════════════════════════╝
+
+Guest Information:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Name:           ${guest.name}
+Phone:          ${guest.phone}
+Email:          ${guest.email || 'N/A'}
+Room:           ${guest.room_name}
+
+Stay Details:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Check-in:       ${checkIn.toLocaleDateString()}
+Check-out:      ${checkOut.toLocaleDateString()}
+Nights:         ${nights}
+Guests:         ${guest.guests}
+
+Services:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Breakfast:      ${guest.breakfast ? 'Included' : 'Not included'}
+Extra Breakfast: ${guest.extra_breakfast || 0} orders
+Laundry:        ${guest.laundry ? 'Yes' : 'No'}
+
+Status:         ${guest.status.toUpperCase()}
+Added by:       ${guest.added_by}
+Date:           ${new Date(guest.created_at).toLocaleString()}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Contact: +233 24 640 1209
+Email: elkadlodge@gmail.com
+Location: Sewua - Awiem, Kumasi
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Thank you for choosing Elkad Lodge!
+    `
+    return receipt
+  }
+
+  const downloadReceipt = (guest) => {
+    const receipt = generateReceipt(guest)
+    const blob = new Blob([receipt], { type: 'text/plain' })
+    const url = window.URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `receipt-${guest.name.replace(/\s+/g, '-')}-${guest.id}.txt`
+    a.click()
+    window.URL.revokeObjectURL(url)
+  }
+
+  const shareReceipt = async (guest) => {
+    const receipt = generateReceipt(guest)
+    
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: `Receipt - ${guest.name}`,
+          text: receipt
+        })
+      } catch (error) {
+        // User cancelled or error occurred
+        copyToClipboard(receipt)
+      }
+    } else {
+      copyToClipboard(receipt)
+    }
+  }
+
+  const copyToClipboard = (text) => {
+    navigator.clipboard.writeText(text).then(() => {
+      alert('Receipt copied to clipboard!')
+    }).catch(() => {
+      alert('Failed to copy receipt')
+    })
+  }
+
   if (loading) return <div>Loading...</div>
 
   return (
@@ -111,6 +193,7 @@ export default function AdminGuests() {
               <th className="p-3 text-left">Check-out</th>
               <th className="p-3 text-left">Guests</th>
               <th className="p-3 text-left">Breakfast</th>
+              <th className="p-3 text-left">Extra B/L</th>
               <th className="p-3 text-left">Status</th>
               <th className="p-3 text-left">Actions</th>
             </tr>
@@ -129,6 +212,12 @@ export default function AdminGuests() {
                 <td className="p-3">{guest.guests}</td>
                 <td className="p-3">{guest.breakfast ? 'Yes' : 'No'}</td>
                 <td className="p-3">
+                  <div className="text-sm">
+                    <div>B: +{guest.extra_breakfast || 0}</div>
+                    <div>L: {guest.laundry ? 'Yes' : 'No'}</div>
+                  </div>
+                </td>
+                <td className="p-3">
                   <span className={`px-2 py-1 rounded text-sm ${
                     guest.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
                   }`}>
@@ -136,17 +225,34 @@ export default function AdminGuests() {
                   </span>
                 </td>
                 <td className="p-3">
-                  {guest.status === 'active' && (
+                  <div className="flex items-center space-x-2">
                     <button 
-                      onClick={() => {
-                        setSelectedGuest(guest)
-                        setShowRemoveModal(true)
-                      }}
-                      className="text-red-600 hover:text-red-800"
+                      onClick={() => downloadReceipt(guest)}
+                      className="text-blue-600 hover:text-blue-800"
+                      title="Download Receipt"
                     >
-                      <Trash2 size={18} />
+                      <FileText size={18} />
                     </button>
-                  )}
+                    <button 
+                      onClick={() => shareReceipt(guest)}
+                      className="text-green-600 hover:text-green-800"
+                      title="Share Receipt"
+                    >
+                      <Share2 size={18} />
+                    </button>
+                    {guest.status === 'active' && (
+                      <button 
+                        onClick={() => {
+                          setSelectedGuest(guest)
+                          setShowRemoveModal(true)
+                        }}
+                        className="text-red-600 hover:text-red-800"
+                        title="Remove Guest"
+                      >
+                        <Trash2 size={18} />
+                      </button>
+                    )}
+                  </div>
                 </td>
               </tr>
             ))}
@@ -247,6 +353,26 @@ export default function AdminGuests() {
                   className="w-5 h-5"
                 />
                 <label className="font-semibold">Include Breakfast</label>
+              </div>
+              <div>
+                <label className="block font-semibold mb-2">Extra Breakfast Orders</label>
+                <input 
+                  type="number"
+                  min="0"
+                  value={formData.extra_breakfast}
+                  onChange={(e) => setFormData({...formData, extra_breakfast: parseInt(e.target.value) || 0})}
+                  className="w-full p-3 border rounded-lg"
+                />
+                <p className="text-sm text-gray-600 mt-1">Additional breakfast orders beyond included</p>
+              </div>
+              <div className="flex items-center space-x-2">
+                <input 
+                  type="checkbox"
+                  checked={formData.laundry}
+                  onChange={(e) => setFormData({...formData, laundry: e.target.checked})}
+                  className="w-5 h-5"
+                />
+                <label className="font-semibold">Laundry Service</label>
               </div>
               <button type="submit" className="btn-primary w-full">Add Guest</button>
             </form>

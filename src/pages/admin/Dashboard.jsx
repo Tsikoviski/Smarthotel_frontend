@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Outlet, Link, useNavigate } from 'react-router-dom'
-import { Home, Bed, Calendar, LogOut, Users, BarChart3, AlertCircle } from 'lucide-react'
+import { Home, Bed, Calendar, LogOut, Users, BarChart3, AlertCircle, UserCog } from 'lucide-react'
 
 export default function AdminDashboard() {
   const navigate = useNavigate()
@@ -77,10 +77,14 @@ export default function AdminDashboard() {
             <Users className="inline mr-2" size={20} />
             Guests
           </Link>
-          <Link to="/admin/rooms" className="btn-secondary">
-            <Bed className="inline mr-2" size={20} />
-            Rooms
-          </Link>
+          {userRole === 'manager' && (
+            <>
+              <Link to="/admin/rooms" className="btn-secondary">
+                <Bed className="inline mr-2" size={20} />
+                Rooms
+              </Link>
+            </>
+          )}
           {userRole === 'manager' && (
             <>
               <Link to="/admin/analytics" className="btn-secondary">
@@ -95,6 +99,10 @@ export default function AdminDashboard() {
                     {removalCount}
                   </span>
                 )}
+              </Link>
+              <Link to="/admin/users" className="btn-secondary">
+                <UserCog className="inline mr-2" size={20} />
+                User Management
               </Link>
             </>
           )}

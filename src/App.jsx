@@ -12,6 +12,7 @@ import AdminBookings from './pages/admin/Bookings'
 import AdminGuests from './pages/admin/Guests'
 import Analytics from './pages/admin/Analytics'
 import RemovalReasons from './pages/admin/RemovalReasons'
+import Users from './pages/admin/Users'
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
           <Route path="guests" element={<AdminGuests />} />
           <Route path="analytics" element={<Analytics />} />
           <Route path="removal-reasons" element={<RemovalReasons />} />
+          <Route path="users" element={<Users />} />
         </Route>
       </Routes>
     </Router>
