@@ -20,6 +20,13 @@ export default function AdminDashboard() {
       // Fetch removal reasons count for manager
       if (adminData.role === 'manager') {
         fetchRemovalCount()
+        
+        // Auto-refresh removal count every 30 seconds
+        const interval = setInterval(() => {
+          fetchRemovalCount()
+        }, 30000)
+        
+        return () => clearInterval(interval)
       }
     }
   }, [])

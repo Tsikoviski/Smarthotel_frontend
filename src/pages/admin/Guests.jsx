@@ -31,6 +31,13 @@ export default function AdminGuests() {
   useEffect(() => {
     fetchGuests()
     fetchRooms()
+    
+    // Auto-refresh every 15 seconds for real-time guest updates
+    const interval = setInterval(() => {
+      fetchGuests()
+    }, 15000)
+    
+    return () => clearInterval(interval)
   }, [])
 
   const fetchGuests = async () => {

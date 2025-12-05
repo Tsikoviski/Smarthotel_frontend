@@ -11,6 +11,13 @@ export default function AdminRooms() {
 
   useEffect(() => {
     fetchRooms()
+    
+    // Auto-refresh every 20 seconds for real-time room availability
+    const interval = setInterval(() => {
+      fetchRooms()
+    }, 20000)
+    
+    return () => clearInterval(interval)
   }, [])
 
   const fetchRooms = async () => {

@@ -15,6 +15,17 @@ export default function RoomDetails() {
 
   useEffect(() => {
     fetchRoom()
+    
+    // Auto-refresh every 30 seconds for real-time availability
+    const interval = setInterval(() => {
+      if (checkIn && checkOut) {
+        checkAvailability()
+      } else {
+        fetchRoom()
+      }
+    }, 30000)
+    
+    return () => clearInterval(interval)
   }, [id])
 
   useEffect(() => {

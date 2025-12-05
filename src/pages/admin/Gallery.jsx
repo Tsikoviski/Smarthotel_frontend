@@ -16,6 +16,13 @@ export default function AdminGallery() {
 
   useEffect(() => {
     fetchGallery()
+    
+    // Auto-refresh every 30 seconds for new images
+    const interval = setInterval(() => {
+      fetchGallery()
+    }, 30000)
+    
+    return () => clearInterval(interval)
   }, [])
 
   const fetchGallery = async () => {

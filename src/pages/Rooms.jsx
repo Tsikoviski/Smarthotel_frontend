@@ -9,6 +9,13 @@ export default function Rooms() {
 
   useEffect(() => {
     fetchRooms()
+    
+    // Auto-refresh every 30 seconds for real-time availability updates
+    const interval = setInterval(() => {
+      fetchRooms()
+    }, 30000)
+    
+    return () => clearInterval(interval)
   }, [])
 
   const fetchRooms = async () => {
@@ -37,9 +44,24 @@ export default function Rooms() {
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {rooms.map((room) => (
             <div key={room.id} className="card hover:shadow-xl transition">
-              <div className="h-64 bg-gradient-to-br from-primary to-secondary relative">
-                {room.image_url && (
-                  <img src={room.image_url} alt={room.name} className="w-full h-full object-cover" />
+              <div className="h-64 bg-gradient-to-br from-primary to-secondary relative overflow-hidden">
+                {room.images && room.images.length > 0 ? (
+                  <img 
+                    src={room.images[0]} 
+                    alt={room.name} 
+                    className="w-full h-full object-cover hover:scale-110 transition duration-300" 
+                  />
+                ) : room.image_url ? (
+                  <img 
+                    src={room.image_url} 
+                    alt={room.name} 
+                    className="w-full h-full object-cover hover:scale-110 transition duration-300" 
+                  />
+                ) : null}
+                {room.images && room.images.length > 1 && (
+                  <div className="absolute bottom-2 right-2 bg-black bg-opacity-70 text-white px-2 py-1 rounded text-xs">
+                    +{room.images.length - 1} more
+                  </div>
                 )}
               </div>
               <div className="p-6">

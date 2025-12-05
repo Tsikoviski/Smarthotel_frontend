@@ -10,6 +10,13 @@ export default function Gallery() {
 
   useEffect(() => {
     fetchGallery()
+    
+    // Auto-refresh every 60 seconds for new gallery images
+    const interval = setInterval(() => {
+      fetchGallery()
+    }, 60000)
+    
+    return () => clearInterval(interval)
   }, [])
 
   const fetchGallery = async () => {
