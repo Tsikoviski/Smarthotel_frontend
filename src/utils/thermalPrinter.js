@@ -99,7 +99,7 @@ export function printThermalReceipt(guest) {
       <div class="receipt-header">
         <div class="receipt-title">ELKAD LODGE</div>
         <div class="receipt-subtitle">Sewua - Awiem, Kumasi</div>
-        <div class="receipt-subtitle">+233 24 640 1209</div>
+        <div class="receipt-subtitle">+233 55 261 2224</div>
         <div class="receipt-subtitle">elkadlodge@gmail.com</div>
       </div>
       

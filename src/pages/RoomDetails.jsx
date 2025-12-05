@@ -9,10 +9,19 @@ export default function RoomDetails() {
   const [room, setRoom] = useState(null)
   const [loading, setLoading] = useState(true)
   const [selectedImageIndex, setSelectedImageIndex] = useState(0)
+  const [checkIn, setCheckIn] = useState('')
+  const [checkOut, setCheckOut] = useState('')
+  const [checkingAvailability, setCheckingAvailability] = useState(false)
 
   useEffect(() => {
     fetchRoom()
   }, [id])
+
+  useEffect(() => {
+    if (checkIn && checkOut) {
+      checkAvailability()
+    }
+  }, [checkIn, checkOut])
 
   const fetchRoom = async () => {
     try {
@@ -25,8 +34,30 @@ export default function RoomDetails() {
     }
   }
 
+  const checkAvailability = async () => {
+    if (!checkIn || !checkOut) return
+    
+    setCheckingAvailability(true)
+    try {
+      const response = await api.get(`/api/rooms/${id}?checkIn=${checkIn}&checkOut=${checkOut}`)
+      setRoom(response.data)
+    } catch (error) {
+      console.error('Error checking availability:', error)
+    } finally {
+      setCheckingAvailability(false)
+    }
+  }
+
   const handleBookNow = () => {
-    navigate('/booking', { state: { roomId: id, roomName: room.name, roomPrice: room.price } })
+    navigate('/booking', { 
+      state: { 
+        roomId: id, 
+        roomName: room.name, 
+        roomPrice: room.price,
+        checkIn,
+        checkOut
+      } 
+    })
   }
 
   if (loading) {
@@ -97,11 +128,43 @@ export default function RoomDetails() {
               <span>Maximum {room.max_guests} guests</span>
             </div>
 
+            {/* Date Selection for Availability Check */}
+            <div className="mb-6 p-4 rounded-lg bg-gray-50 border border-gray-200">
+              <p className="text-sm font-semibold mb-3">Check Availability for Your Dates</p>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="text-xs text-gray-600 block mb-1">Check-in</label>
+                  <input
+                    type="date"
+                    value={checkIn}
+                    onChange={(e) => setCheckIn(e.target.value)}
+                    min={new Date().toISOString().split('T')[0]}
+                    className="w-full p-2 border rounded text-sm"
+                  />
+                </div>
+                <div>
+                  <label className="text-xs text-gray-600 block mb-1">Check-out</label>
+                  <input
+                    type="date"
+                    value={checkOut}
+                    onChange={(e) => setCheckOut(e.target.value)}
+                    min={checkIn || new Date().toISOString().split('T')[0]}
+                    className="w-full p-2 border rounded text-sm"
+                  />
+                </div>
+              </div>
+              {checkingAvailability && (
+                <p className="text-xs text-blue-600 mt-2">Checking availability...</p>
+              )}
+            </div>
+
             {/* Room Availability Display */}
             <div className="mb-6 p-4 rounded-lg bg-gradient-to-r from-blue-50 to-green-50 border border-blue-200">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-gray-600 mb-1">Room Availability</p>
+                  <p className="text-sm text-gray-600 mb-1">
+                    {checkIn && checkOut ? 'Availability for Selected Dates' : 'Current Availability'}
+                  </p>
                   <p className="text-2xl font-bold text-green-600">
                     {room.available_rooms !== undefined ? room.available_rooms : (room.quantity || 1)} 
                     <span className="text-base font-normal text-gray-600"> 

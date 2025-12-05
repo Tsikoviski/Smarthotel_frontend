@@ -22,8 +22,7 @@ export default function Footer() {
               <div className="flex items-center space-x-2">
                 <Phone size={18} />
                 <div>
-                  <div><a href="tel:+233246401209" className="hover:text-white">+233 24 640 1209</a></div>
-                  <div><a href="tel:+233508958731" className="hover:text-white">+233 50 895 8731</a></div>
+                  <div><a href="tel:+233552612224" className="hover:text-white">+233 55 261 2224</a></div>
                 </div>
               </div>
               <div className="flex items-center space-x-2">
@@ -32,7 +31,7 @@ export default function Footer() {
               </div>
               <div className="flex items-center space-x-2">
                 <MessageCircle size={18} />
-                <a href="https://wa.me/233246401209" target="_blank" rel="noopener noreferrer" className="hover:text-white">WhatsApp Us</a>
+                <a href="https://wa.me/233552612224" target="_blank" rel="noopener noreferrer" className="hover:text-white">WhatsApp Us</a>
               </div>
             </div>
           </div>

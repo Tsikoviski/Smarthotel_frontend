@@ -20,9 +20,9 @@ export default function Navbar() {
             <Link to="/rooms" className="hover:text-primary transition">Rooms</Link>
             <Link to="/gallery" className="hover:text-primary transition">Gallery</Link>
             <Link to="/contact" className="hover:text-primary transition">Contact</Link>
-            <a href="tel:+233246401209" className="flex items-center space-x-1 text-primary">
+            <a href="tel:+233552612224" className="flex items-center space-x-1 text-primary">
               <Phone size={18} />
-              <span>+233 24 640 1209</span>
+              <span>+233 55 261 2224</span>
             </a>
             <Link to="/booking" className="btn-primary">Book Now</Link>
           </div>

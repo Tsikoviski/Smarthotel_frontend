@@ -160,7 +160,7 @@ export function downloadPDFReceipt(guest) {
         <div class="receipt-header">
           <div class="hotel-name">ELKAD LODGE</div>
           <div class="hotel-info">Sewua - Awiem, Kumasi, Ghana</div>
-          <div class="hotel-info">Phone: +233 24 640 1209</div>
+          <div class="hotel-info">Phone: +233 55 261 2224</div>
           <div class="hotel-info">Email: elkadlodge@gmail.com</div>
         </div>
         

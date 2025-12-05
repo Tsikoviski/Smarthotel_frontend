@@ -179,7 +179,7 @@ Added by:       ${guest.added_by}
 Date:           ${new Date(guest.created_at).toLocaleString()}
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Contact: +233 24 640 1209
+Contact: +233 55 261 2224
 Email: elkadlodge@gmail.com
 Location: Sewua - Awiem, Kumasi
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
