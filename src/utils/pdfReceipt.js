@@ -1,24 +1,20 @@
-// PDF Receipt Generator using jsPDF
-// Note: This uses the browser's built-in PDF generation without external libraries
+// PDF Receipt Generator
+// Uses browser's print-to-PDF functionality
 
 /**
  * Generate and download PDF receipt
  */
 export function downloadPDFReceipt(guest) {
+  // Create a new window for PDF generation
+  const printWindow = window.open('', '_blank', 'width=800,height=600')
+  
+  if (!printWindow) {
+    alert('Please allow popups to download PDF receipts')
+    return
+  }
   const checkIn = new Date(guest.check_in)
   const checkOut = new Date(guest.check_out)
   const nights = Math.ceil((checkOut - checkIn) / (1000 * 60 * 60 * 24))
-  
-  // Create a hidden iframe for PDF generation
-  const printFrame = document.createElement('iframe')
-  printFrame.style.position = 'absolute'
-  printFrame.style.width = '0'
-  printFrame.style.height = '0'
-  printFrame.style.border = 'none'
-  
-  document.body.appendChild(printFrame)
-  
-  const printDocument = printFrame.contentWindow.document
   
   // PDF-optimized CSS
   const pdfCSS = `
@@ -272,19 +268,19 @@ export function downloadPDFReceipt(guest) {
     </html>
   `
   
-  printDocument.open()
-  printDocument.write(receiptHTML)
-  printDocument.close()
+  printWindow.document.open()
+  printWindow.document.write(receiptHTML)
+  printWindow.document.close()
   
   // Wait for content to load, then trigger print to PDF
-  printFrame.contentWindow.onload = () => {
+  printWindow.onload = () => {
     setTimeout(() => {
-      printFrame.contentWindow.print()
-      
-      // Remove iframe after printing
+      printWindow.focus()
+      printWindow.print()
+      // Window will close after print dialog is dismissed
       setTimeout(() => {
-        document.body.removeChild(printFrame)
-      }, 1000)
+        printWindow.close()
+      }, 100)
     }, 250)
   }
 }

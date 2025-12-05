@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import api from '../../api/axios'
-import { Plus, X, Trash2, FileText, Share2, Printer, Download } from 'lucide-react'
+import { Plus, X, Trash2, FileText, Share2, Printer, Download, Search } from 'lucide-react'
 import { printThermalReceipt } from '../../utils/thermalPrinter'
 import { downloadPDFReceipt } from '../../utils/pdfReceipt'
 
@@ -13,6 +13,7 @@ export default function AdminGuests() {
   const [selectedGuest, setSelectedGuest] = useState(null)
   const [removalReason, setRemovalReason] = useState('')
   const [userRole, setUserRole] = useState('')
+  const [searchTerm, setSearchTerm] = useState('')
   const [formData, setFormData] = useState({
     name: '', phone: '', email: '', room_id: '', 
     check_in: '', check_out: '', guests: 1, breakfast: true, extra_breakfast: 0, laundry: false
@@ -225,6 +226,20 @@ Thank you for choosing Elkad Lodge!
     })
   }
 
+  // Filter guests based on search term
+  const filteredGuests = guests.filter(guest => {
+    if (!searchTerm) return true
+    
+    const search = searchTerm.toLowerCase()
+    return (
+      guest.name.toLowerCase().includes(search) ||
+      guest.phone.toLowerCase().includes(search) ||
+      (guest.email && guest.email.toLowerCase().includes(search)) ||
+      guest.room_name.toLowerCase().includes(search) ||
+      guest.status.toLowerCase().includes(search)
+    )
+  })
+
   if (loading) return <div>Loading...</div>
 
   return (
@@ -235,6 +250,33 @@ Thank you for choosing Elkad Lodge!
           <Plus size={20} />
           <span>Add Guest</span>
         </button>
+      </div>
+
+      {/* Search Bar */}
+      <div className="mb-6">
+        <div className="relative">
+          <input
+            type="text"
+            placeholder="Search guests by name, phone, email, room, or status..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full p-3 pl-10 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+          />
+          <Search className="absolute left-3 top-3.5 text-gray-400" size={20} />
+          {searchTerm && (
+            <button
+              onClick={() => setSearchTerm('')}
+              className="absolute right-3 top-3 text-gray-400 hover:text-gray-600"
+            >
+              <X size={20} />
+            </button>
+          )}
+        </div>
+        {searchTerm && (
+          <p className="text-sm text-gray-600 mt-2">
+            Found {filteredGuests.length} guest{filteredGuests.length !== 1 ? 's' : ''}
+          </p>
+        )}
       </div>
 
       <div className="card overflow-x-auto">
@@ -254,7 +296,14 @@ Thank you for choosing Elkad Lodge!
             </tr>
           </thead>
           <tbody>
-            {guests.map(guest => (
+            {filteredGuests.length === 0 ? (
+              <tr>
+                <td colSpan="10" className="p-8 text-center text-gray-500">
+                  {searchTerm ? 'No guests found matching your search' : 'No guests yet'}
+                </td>
+              </tr>
+            ) : (
+              filteredGuests.map(guest => (
               <tr key={guest.id} className="border-t">
                 <td className="p-3">{guest.name}</td>
                 <td className="p-3">
@@ -342,7 +391,7 @@ Thank you for choosing Elkad Lodge!
                   </div>
                 </td>
               </tr>
-            ))}
+            )))}
           </tbody>
         </table>
       </div>

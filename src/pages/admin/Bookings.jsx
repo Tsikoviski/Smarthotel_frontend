@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react'
-import { Trash2 } from 'lucide-react'
+import { Trash2, Search, X } from 'lucide-react'
 import api from '../../api/axios'
 
 export default function AdminBookings() {
   const [bookings, setBookings] = useState([])
   const [loading, setLoading] = useState(true)
   const [userRole, setUserRole] = useState('')
+  const [searchTerm, setSearchTerm] = useState('')
 
   useEffect(() => {
     // Get user role
@@ -65,11 +66,54 @@ export default function AdminBookings() {
     }
   }
 
+  // Filter bookings based on search term
+  const filteredBookings = bookings.filter(booking => {
+    if (!searchTerm) return true
+    
+    const search = searchTerm.toLowerCase()
+    return (
+      booking.customer_name.toLowerCase().includes(search) ||
+      booking.customer_phone.toLowerCase().includes(search) ||
+      booking.customer_email.toLowerCase().includes(search) ||
+      booking.room_name.toLowerCase().includes(search) ||
+      booking.payment_status.toLowerCase().includes(search) ||
+      booking.id.toString().includes(search)
+    )
+  })
+
   if (loading) return <div>Loading...</div>
 
   return (
     <div>
       <h2 className="text-2xl font-bold mb-6">Bookings</h2>
+      
+      {/* Search Bar */}
+      <div className="mb-6">
+        <div className="relative">
+          <input
+            type="text"
+            placeholder="Search bookings by ID, customer name, phone, email, room, or status..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full p-3 pl-10 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+          />
+          <Search className="absolute left-3 top-3.5 text-gray-400" size={20} />
+          {searchTerm && (
+            <button
+              onClick={() => setSearchTerm('')}
+              className="absolute right-3 top-3 text-gray-400 hover:text-gray-600"
+            >
+              <X size={20} />
+            </button>
+          )}
+        </div>
+        {searchTerm && (
+          <p className="text-sm text-gray-600 mt-2">
+            Found {filteredBookings.length} booking{filteredBookings.length !== 1 ? 's' : ''}
+          </p>
+        )}
+      </div>
+
       <div className="card overflow-x-auto">
         <table className="w-full">
           <thead className="bg-gray-50">
@@ -85,7 +129,14 @@ export default function AdminBookings() {
             </tr>
           </thead>
           <tbody>
-            {bookings.map(booking => (
+            {filteredBookings.length === 0 ? (
+              <tr>
+                <td colSpan="8" className="p-8 text-center text-gray-500">
+                  {searchTerm ? 'No bookings found matching your search' : 'No bookings yet'}
+                </td>
+              </tr>
+            ) : (
+              filteredBookings.map(booking => (
               <tr key={booking.id} className="border-t">
                 <td className="p-3">{booking.id}</td>
                 <td className="p-3">
@@ -127,7 +178,7 @@ export default function AdminBookings() {
                   </div>
                 </td>
               </tr>
-            ))}
+            )))}
           </tbody>
         </table>
       </div>
