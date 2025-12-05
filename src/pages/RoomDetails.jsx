@@ -92,9 +92,39 @@ export default function RoomDetails() {
               <span className="text-lg text-gray-600 font-normal">/night</span>
             </div>
 
-            <div className="flex items-center mb-6 text-lg">
+            <div className="flex items-center mb-4 text-lg">
               <Users className="mr-2 text-primary" />
               <span>Maximum {room.max_guests} guests</span>
+            </div>
+
+            {/* Room Availability Display */}
+            <div className="mb-6 p-4 rounded-lg bg-gradient-to-r from-blue-50 to-green-50 border border-blue-200">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-gray-600 mb-1">Room Availability</p>
+                  <p className="text-2xl font-bold text-green-600">
+                    {room.available_rooms !== undefined ? room.available_rooms : (room.quantity || 1)} 
+                    <span className="text-base font-normal text-gray-600"> 
+                      {' '}of {room.total_rooms || room.quantity || 1} available
+                    </span>
+                  </p>
+                </div>
+                <div className="text-right">
+                  {room.available_rooms === 0 ? (
+                    <span className="inline-block px-4 py-2 bg-red-100 text-red-700 rounded-full font-semibold">
+                      Fully Booked
+                    </span>
+                  ) : room.available_rooms <= 2 ? (
+                    <span className="inline-block px-4 py-2 bg-yellow-100 text-yellow-700 rounded-full font-semibold">
+                      Limited Availability
+                    </span>
+                  ) : (
+                    <span className="inline-block px-4 py-2 bg-green-100 text-green-700 rounded-full font-semibold">
+                      Available
+                    </span>
+                  )}
+                </div>
+              </div>
             </div>
 
             <p className="text-gray-700 mb-8 leading-relaxed">{room.description}</p>
@@ -113,9 +143,10 @@ export default function RoomDetails() {
 
             <button 
               onClick={handleBookNow}
-              className="btn-primary w-full text-lg py-4"
+              className="btn-primary w-full text-lg py-4 disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled={room.available_rooms === 0}
             >
-              Book This Room
+              {room.available_rooms === 0 ? 'Fully Booked' : 'Book This Room'}
             </button>
 
             <div className="mt-6 p-4 bg-blue-50 rounded-lg">

@@ -49,11 +49,28 @@ export default function Rooms() {
                   <span className="text-sm text-gray-600 font-normal">/night</span>
                 </div>
                 
-                {room.quantity && (
-                  <div className="text-sm font-semibold text-green-600 mb-3">
-                    {room.quantity} room{room.quantity > 1 ? 's' : ''} available
-                  </div>
-                )}
+                {/* Room Availability Badge */}
+                <div className="mb-3">
+                  {room.available_rooms !== undefined ? (
+                    room.available_rooms === 0 ? (
+                      <span className="inline-block px-3 py-1 bg-red-100 text-red-700 rounded-full text-sm font-semibold">
+                        Fully Booked
+                      </span>
+                    ) : room.available_rooms <= 2 ? (
+                      <span className="inline-block px-3 py-1 bg-yellow-100 text-yellow-700 rounded-full text-sm font-semibold">
+                        {room.available_rooms} room{room.available_rooms > 1 ? 's' : ''} left
+                      </span>
+                    ) : (
+                      <span className="inline-block px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-semibold">
+                        {room.available_rooms} of {room.total_rooms} available
+                      </span>
+                    )
+                  ) : (
+                    <span className="inline-block px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-semibold">
+                      Available
+                    </span>
+                  )}
+                </div>
                 
                 <p className="text-gray-600 mb-4">{room.description}</p>
                 

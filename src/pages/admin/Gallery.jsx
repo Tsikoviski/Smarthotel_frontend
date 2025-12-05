@@ -37,14 +37,17 @@ export default function AdminGallery() {
     const file = e.target.files[0]
     if (!file) return
 
-    if (file.size > 5 * 1024 * 1024) {
-      alert('Image size should be less than 5MB')
+    if (file.size > 10 * 1024 * 1024) {
+      alert('Image size should be less than 10MB')
       return
     }
 
     const reader = new FileReader()
     reader.onloadend = () => {
       setFormData({ ...formData, image_data: reader.result })
+    }
+    reader.onerror = () => {
+      alert('Error reading file. Please try again.')
     }
     reader.readAsDataURL(file)
   }
@@ -179,7 +182,7 @@ export default function AdminGallery() {
                       <p className="text-sm text-gray-600 mb-2">
                         Click to upload or drag and drop
                       </p>
-                      <p className="text-xs text-gray-500">PNG, JPG up to 5MB</p>
+                      <p className="text-xs text-gray-500">PNG, JPG up to 10MB</p>
                       <input
                         type="file"
                         accept="image/*"

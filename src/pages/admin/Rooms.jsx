@@ -57,21 +57,41 @@ export default function AdminRooms() {
   }
 
   const handleImageUpload = (e) => {
-    const file = e.target.files[0]
-    if (!file) return
+    const files = Array.from(e.target.files)
+    if (files.length === 0) return
 
-    if (file.size > 5 * 1024 * 1024) {
-      alert('Image size should be less than 5MB')
+    // Check file sizes
+    const oversizedFiles = files.filter(file => file.size > 10 * 1024 * 1024)
+    if (oversizedFiles.length > 0) {
+      alert('Some images are larger than 10MB. Please choose smaller images.')
       return
     }
 
     setUploadingImage(true)
-    const reader = new FileReader()
-    reader.onloadend = () => {
-      setFormData({ ...formData, images: [...(formData.images || []), reader.result] })
-      setUploadingImage(false)
-    }
-    reader.readAsDataURL(file)
+    
+    // Process all files
+    const promises = files.map(file => {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader()
+        reader.onloadend = () => resolve(reader.result)
+        reader.onerror = reject
+        reader.readAsDataURL(file)
+      })
+    })
+
+    Promise.all(promises)
+      .then(results => {
+        setFormData({ 
+          ...formData, 
+          images: [...(formData.images || []), ...results] 
+        })
+        setUploadingImage(false)
+      })
+      .catch(error => {
+        console.error('Error uploading images:', error)
+        alert('Error uploading images. Please try again.')
+        setUploadingImage(false)
+      })
   }
 
   const removeImage = (index) => {
@@ -141,7 +161,7 @@ export default function AdminRooms() {
             className="p-2 border rounded md:col-span-2"
           />
           <div className="md:col-span-2">
-            <label className="block font-semibold mb-2">Room Images (Upload)</label>
+            <label className="block font-semibold mb-2">Room Images (Upload Multiple)</label>
             <div className="border-2 border-dashed border-gray-300 rounded-lg p-4">
               <input
                 type="file"
@@ -149,17 +169,20 @@ export default function AdminRooms() {
                 onChange={handleImageUpload}
                 className="mb-2"
                 disabled={uploadingImage}
+                multiple
               />
-              {uploadingImage && <p className="text-sm text-gray-600">Uploading...</p>}
+              <p className="text-xs text-gray-500 mb-2">Select multiple images (up to 10MB each)</p>
+              {uploadingImage && <p className="text-sm text-blue-600">Uploading images...</p>}
               {formData.images && formData.images.length > 0 && (
                 <div className="grid grid-cols-4 gap-2 mt-2">
                   {formData.images.map((img, index) => (
-                    <div key={index} className="relative">
+                    <div key={index} className="relative group">
                       <img src={img} alt={`Room ${index + 1}`} className="w-full h-20 object-cover rounded" />
                       <button
                         type="button"
                         onClick={() => removeImage(index)}
-                        className="absolute top-0 right-0 bg-red-600 text-white p-1 rounded-full text-xs"
+                        className="absolute top-0 right-0 bg-red-600 text-white p-1 rounded-full text-xs hover:bg-red-700"
+                        title="Remove image"
                       >
                         ×
                       </button>
@@ -203,8 +226,26 @@ export default function AdminRooms() {
             <p className="text-gray-600 mb-2">{room.description}</p>
             <div className="text-2xl font-bold text-primary mb-2">GH₵ {room.price}/night</div>
             <div className="text-sm text-gray-600 mb-1">Max Guests: {room.max_guests}</div>
-            <div className="text-sm font-semibold text-green-600 mb-2">
-              Available: {room.quantity || 1} room{(room.quantity || 1) > 1 ? 's' : ''}
+            <div className="text-sm mb-2">
+              <span className="font-semibold">Total Rooms:</span> {room.quantity || 1}
+            </div>
+            <div className="text-sm mb-2">
+              {room.available_rooms !== undefined ? (
+                <>
+                  <span className={`font-semibold ${room.available_rooms === 0 ? 'text-red-600' : 'text-green-600'}`}>
+                    Available: {room.available_rooms}
+                  </span>
+                  {room.occupied_rooms > 0 && (
+                    <span className="text-gray-600 ml-2">
+                      (Occupied: {room.occupied_rooms})
+                    </span>
+                  )}
+                </>
+              ) : (
+                <span className="font-semibold text-green-600">
+                  Available: {room.quantity || 1}
+                </span>
+              )}
             </div>
             {room.images && room.images.length > 0 && (
               <div className="text-sm text-blue-600 mb-4">
