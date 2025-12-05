@@ -43,19 +43,23 @@ export default function Rooms() {
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {rooms.map((room) => (
-            <div key={room.id} className="card hover:shadow-xl transition">
+            <Link 
+              key={room.id} 
+              to={`/rooms/${room.id}`}
+              className="card hover:shadow-2xl transition-all duration-300 cursor-pointer group"
+            >
               <div className="h-64 bg-gradient-to-br from-primary to-secondary relative overflow-hidden">
                 {room.images && room.images.length > 0 ? (
                   <img 
                     src={room.images[0]} 
                     alt={room.name} 
-                    className="w-full h-full object-cover hover:scale-110 transition duration-300" 
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" 
                   />
                 ) : room.image_url ? (
                   <img 
                     src={room.image_url} 
                     alt={room.name} 
-                    className="w-full h-full object-cover hover:scale-110 transition duration-300" 
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" 
                   />
                 ) : null}
                 {room.images && room.images.length > 1 && (
@@ -63,9 +67,15 @@ export default function Rooms() {
                     +{room.images.length - 1} more
                   </div>
                 )}
+                {/* Hover Overlay */}
+                <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300 flex items-center justify-center">
+                  <span className="text-white font-semibold text-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    Click for Details
+                  </span>
+                </div>
               </div>
               <div className="p-6">
-                <h3 className="text-2xl font-bold mb-2">{room.name}</h3>
+                <h3 className="text-2xl font-bold mb-2 group-hover:text-primary transition-colors">{room.name}</h3>
                 <div className="text-3xl font-bold text-primary mb-2">
                   GH₵ {room.price}
                   <span className="text-sm text-gray-600 font-normal">/night</span>
@@ -115,14 +125,11 @@ export default function Rooms() {
                   </div>
                 </div>
 
-                <Link 
-                  to={`/rooms/${room.id}`}
-                  className="btn-primary w-full text-center block"
-                >
+                <div className="btn-primary w-full text-center block group-hover:bg-secondary transition-colors">
                   View Details & Book
-                </Link>
+                </div>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </div>

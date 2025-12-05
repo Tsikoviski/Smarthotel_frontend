@@ -6,6 +6,8 @@ import api from '../api/axios'
 export default function Home() {
   const [rooms, setRooms] = useState([])
   const [loading, setLoading] = useState(true)
+  const [galleryImages, setGalleryImages] = useState([])
+  const [currentImageIndex, setCurrentImageIndex] = useState(0)
 
   const services = [
     { icon: Bed, title: 'Bed & Breakfast', desc: 'Comfortable rooms with breakfast' },
@@ -17,14 +19,29 @@ export default function Home() {
 
   useEffect(() => {
     fetchRooms()
+    fetchGalleryImages()
     
     // Auto-refresh every 30 seconds for real-time updates
     const interval = setInterval(() => {
       fetchRooms()
+      fetchGalleryImages()
     }, 30000)
     
     return () => clearInterval(interval)
   }, [])
+
+  // Auto-shuffle hero images every 5 seconds
+  useEffect(() => {
+    if (galleryImages.length > 0) {
+      const shuffleInterval = setInterval(() => {
+        setCurrentImageIndex((prevIndex) => 
+          (prevIndex + 1) % galleryImages.length
+        )
+      }, 5000)
+      
+      return () => clearInterval(shuffleInterval)
+    }
+  }, [galleryImages])
 
   const fetchRooms = async () => {
     try {
@@ -38,24 +55,80 @@ export default function Home() {
     }
   }
 
+  const fetchGalleryImages = async () => {
+    try {
+      const response = await api.get('/api/admin/gallery')
+      if (response.data && response.data.length > 0) {
+        setGalleryImages(response.data)
+      }
+    } catch (error) {
+      console.error('Error fetching gallery images:', error)
+    }
+  }
+
   return (
     <div>
-      {/* Hero Section */}
-      <section className="relative h-[600px] bg-gradient-to-r from-primary to-secondary flex items-center">
-        <div className="container mx-auto px-4 text-white">
-          <div className="max-w-2xl">
-            <h1 className="text-5xl font-bold mb-4">Welcome to Elkad Lodge</h1>
-            <p className="text-xl mb-8">Experience premium comfort in the heart of Kumasi. Your home away from home.</p>
+      {/* Hero Section with Image Carousel */}
+      <section className="relative h-[600px] overflow-hidden">
+        {/* Background Image Carousel */}
+        <div className="absolute inset-0">
+          {galleryImages.length > 0 ? (
+            <>
+              {galleryImages.map((image, index) => (
+                <div
+                  key={image.id}
+                  className={`absolute inset-0 transition-opacity duration-1000 ${
+                    index === currentImageIndex ? 'opacity-100' : 'opacity-0'
+                  }`}
+                >
+                  <img
+                    src={image.image_data}
+                    alt={image.title || 'Elkad Lodge'}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              ))}
+              {/* Dark overlay for text readability */}
+              <div className="absolute inset-0 bg-black bg-opacity-50"></div>
+            </>
+          ) : (
+            <div className="absolute inset-0 bg-gradient-to-r from-primary to-secondary"></div>
+          )}
+        </div>
+
+        {/* Hero Content */}
+        <div className="relative container mx-auto px-4 h-full flex items-center">
+          <div className="max-w-2xl text-white">
+            <h1 className="text-5xl font-bold mb-4 drop-shadow-lg">Welcome to Elkad Lodge</h1>
+            <p className="text-xl mb-8 drop-shadow-md">Experience premium comfort in the heart of Kumasi. Your home away from home.</p>
             <div className="flex space-x-4">
-              <Link to="/booking" className="bg-white text-primary px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition">
+              <Link to="/booking" className="bg-white text-primary px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition shadow-lg">
                 Book Now
               </Link>
-              <Link to="/rooms" className="border-2 border-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-primary transition">
+              <Link to="/rooms" className="border-2 border-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-primary transition shadow-lg">
                 View Rooms
               </Link>
             </div>
           </div>
         </div>
+
+        {/* Image Indicators */}
+        {galleryImages.length > 1 && (
+          <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-2 z-10">
+            {galleryImages.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => setCurrentImageIndex(index)}
+                className={`w-3 h-3 rounded-full transition-all ${
+                  index === currentImageIndex 
+                    ? 'bg-white w-8' 
+                    : 'bg-white bg-opacity-50 hover:bg-opacity-75'
+                }`}
+                aria-label={`Go to image ${index + 1}`}
+              />
+            ))}
+          </div>
+        )}
       </section>
 
       {/* Services Section */}
@@ -86,26 +159,36 @@ export default function Home() {
           ) : (
             <div className="grid md:grid-cols-3 gap-8">
               {rooms.map((room) => (
-                <div key={room.id} className="card hover:shadow-xl transition">
-                  {/* Room Image */}
+                <Link 
+                  key={room.id} 
+                  to={`/rooms/${room.id}`}
+                  className="card hover:shadow-2xl transition-all duration-300 cursor-pointer group"
+                >
+                  {/* Room Image with Hover Zoom */}
                   <div className="h-64 bg-gradient-to-br from-primary to-secondary relative overflow-hidden">
                     {room.images && room.images.length > 0 ? (
                       <img 
                         src={room.images[0]} 
                         alt={room.name} 
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                       />
                     ) : room.image_url ? (
                       <img 
                         src={room.image_url} 
                         alt={room.name} 
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                       />
                     ) : null}
+                    {/* Hover Overlay */}
+                    <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300 flex items-center justify-center">
+                      <span className="text-white font-semibold text-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        Click for Details
+                      </span>
+                    </div>
                   </div>
                   
                   <div className="p-6">
-                    <h3 className="text-xl font-bold mb-2">{room.name}</h3>
+                    <h3 className="text-xl font-bold mb-2 group-hover:text-primary transition-colors">{room.name}</h3>
                     <div className="text-2xl font-bold text-primary mb-3">
                       GH₵ {room.price}
                       <span className="text-sm text-gray-600 font-normal">/night</span>
@@ -156,14 +239,11 @@ export default function Home() {
                       </div>
                     </div>
                     
-                    <Link 
-                      to={`/rooms/${room.id}`}
-                      className="btn-primary w-full text-center block"
-                    >
+                    <div className="btn-primary w-full text-center block group-hover:bg-secondary transition-colors">
                       View Details
-                    </Link>
+                    </div>
                   </div>
-                </div>
+                </Link>
               ))}
             </div>
           )}
