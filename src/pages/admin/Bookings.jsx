@@ -5,6 +5,16 @@ import api from '../../api/axios'
 export default function AdminBookings() {
   const [bookings, setBookings] = useState([])
   const [loading, setLoading] = useState(true)
+  const [userRole, setUserRole] = useState('')
+
+  useEffect(() => {
+    // Get user role
+    const admin = localStorage.getItem('admin')
+    if (admin) {
+      const adminData = JSON.parse(admin)
+      setUserRole(adminData.role)
+    }
+  }, [])
 
   useEffect(() => {
     fetchBookings()
@@ -105,13 +115,15 @@ export default function AdminBookings() {
                         Mark Paid
                       </button>
                     )}
-                    <button 
-                      onClick={() => handleDelete(booking.id)}
-                      className="text-red-600 hover:text-red-800"
-                      title="Delete Booking"
-                    >
-                      <Trash2 size={18} />
-                    </button>
+                    {userRole === 'manager' && (
+                      <button 
+                        onClick={() => handleDelete(booking.id)}
+                        className="text-red-600 hover:text-red-800"
+                        title="Delete Booking (Manager Only)"
+                      >
+                        <Trash2 size={18} />
+                      </button>
+                    )}
                   </div>
                 </td>
               </tr>

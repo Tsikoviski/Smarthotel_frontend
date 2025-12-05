@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react'
 import api from '../../api/axios'
-import { Plus, X, Trash2, FileText, Share2, Printer } from 'lucide-react'
+import { Plus, X, Trash2, FileText, Share2, Printer, Download } from 'lucide-react'
 import { printThermalReceipt } from '../../utils/thermalPrinter'
+import { downloadPDFReceipt } from '../../utils/pdfReceipt'
 
 export default function AdminGuests() {
   const [guests, setGuests] = useState([])
@@ -11,10 +12,20 @@ export default function AdminGuests() {
   const [showRemoveModal, setShowRemoveModal] = useState(false)
   const [selectedGuest, setSelectedGuest] = useState(null)
   const [removalReason, setRemovalReason] = useState('')
+  const [userRole, setUserRole] = useState('')
   const [formData, setFormData] = useState({
     name: '', phone: '', email: '', room_id: '', 
     check_in: '', check_out: '', guests: 1, breakfast: true, extra_breakfast: 0, laundry: false
   })
+
+  useEffect(() => {
+    // Get user role
+    const admin = localStorage.getItem('admin')
+    if (admin) {
+      const adminData = JSON.parse(admin)
+      setUserRole(adminData.role)
+    }
+  }, [])
 
   useEffect(() => {
     fetchGuests()
@@ -278,9 +289,16 @@ Thank you for choosing Elkad Lodge!
                       <Printer size={18} />
                     </button>
                     <button 
-                      onClick={() => downloadReceipt(guest)}
+                      onClick={() => downloadPDFReceipt(guest)}
                       className="text-blue-600 hover:text-blue-800"
-                      title="Download Receipt"
+                      title="Download PDF Receipt"
+                    >
+                      <Download size={18} />
+                    </button>
+                    <button 
+                      onClick={() => downloadReceipt(guest)}
+                      className="text-teal-600 hover:text-teal-800"
+                      title="Download Text Receipt"
                     >
                       <FileText size={18} />
                     </button>
@@ -312,13 +330,15 @@ Thank you for choosing Elkad Lodge!
                         </button>
                       </>
                     )}
-                    <button 
-                      onClick={() => handlePermanentDelete(guest.id)}
-                      className="text-red-600 hover:text-red-800"
-                      title="Delete Permanently"
-                    >
-                      <X size={18} />
-                    </button>
+                    {userRole === 'manager' && (
+                      <button 
+                        onClick={() => handlePermanentDelete(guest.id)}
+                        className="text-red-600 hover:text-red-800"
+                        title="Delete Permanently (Manager Only)"
+                      >
+                        <X size={18} />
+                      </button>
+                    )}
                   </div>
                 </td>
               </tr>
