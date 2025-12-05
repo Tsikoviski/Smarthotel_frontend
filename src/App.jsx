@@ -13,6 +13,8 @@ import AdminGuests from './pages/admin/Guests'
 import Analytics from './pages/admin/Analytics'
 import RemovalReasons from './pages/admin/RemovalReasons'
 import Users from './pages/admin/Users'
+import AdminGallery from './pages/admin/Gallery'
+import Gallery from './pages/Gallery'
 
 function App() {
   return (
@@ -23,6 +25,7 @@ function App() {
           <Route path="rooms" element={<Rooms />} />
           <Route path="rooms/:id" element={<RoomDetails />} />
           <Route path="booking" element={<Booking />} />
+          <Route path="gallery" element={<Gallery />} />
           <Route path="contact" element={<Contact />} />
         </Route>
         
@@ -35,6 +38,7 @@ function App() {
           <Route path="analytics" element={<Analytics />} />
           <Route path="removal-reasons" element={<RemovalReasons />} />
           <Route path="users" element={<Users />} />
+          <Route path="gallery" element={<AdminGallery />} />
         </Route>
       </Routes>
     </Router>

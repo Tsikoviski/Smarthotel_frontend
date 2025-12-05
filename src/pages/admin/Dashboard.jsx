@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Outlet, Link, useNavigate } from 'react-router-dom'
-import { Home, Bed, Calendar, LogOut, Users, BarChart3, AlertCircle, UserCog } from 'lucide-react'
+import { Home, Bed, Calendar, LogOut, Users, BarChart3, AlertCircle, UserCog, Image as ImageIcon } from 'lucide-react'
 
 export default function AdminDashboard() {
   const navigate = useNavigate()
@@ -103,6 +103,10 @@ export default function AdminDashboard() {
               <Link to="/admin/users" className="btn-secondary">
                 <UserCog className="inline mr-2" size={20} />
                 User Management
+              </Link>
+              <Link to="/admin/gallery" className="btn-secondary">
+                <ImageIcon className="inline mr-2" size={20} />
+                Gallery
               </Link>
             </>
           )}

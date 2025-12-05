@@ -8,6 +8,7 @@ export default function RoomDetails() {
   const navigate = useNavigate()
   const [room, setRoom] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0)
 
   useEffect(() => {
     fetchRoom()
@@ -51,11 +52,36 @@ export default function RoomDetails() {
         <div className="grid lg:grid-cols-2 gap-12">
           {/* Image Gallery */}
           <div>
-            <div className="h-96 bg-gradient-to-br from-primary to-secondary rounded-lg mb-4">
-              {room.image_url && (
-                <img src={room.image_url} alt={room.name} className="w-full h-full object-cover rounded-lg" />
-              )}
-            </div>
+            {room.images && room.images.length > 0 ? (
+              <>
+                <div className="h-96 bg-gray-200 rounded-lg mb-4 overflow-hidden">
+                  <img 
+                    src={room.images[selectedImageIndex]} 
+                    alt={room.name} 
+                    className="w-full h-full object-cover" 
+                  />
+                </div>
+                <div className="grid grid-cols-4 gap-2">
+                  {room.images.map((img, index) => (
+                    <div
+                      key={index}
+                      onClick={() => setSelectedImageIndex(index)}
+                      className={`h-20 rounded cursor-pointer overflow-hidden border-2 ${
+                        selectedImageIndex === index ? 'border-primary' : 'border-transparent'
+                      }`}
+                    >
+                      <img src={img} alt={`${room.name} ${index + 1}`} className="w-full h-full object-cover" />
+                    </div>
+                  ))}
+                </div>
+              </>
+            ) : (
+              <div className="h-96 bg-gradient-to-br from-primary to-secondary rounded-lg mb-4">
+                {room.image_url && (
+                  <img src={room.image_url} alt={room.name} className="w-full h-full object-cover rounded-lg" />
+                )}
+              </div>
+            )}
           </div>
 
           {/* Room Info */}

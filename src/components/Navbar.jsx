@@ -18,6 +18,7 @@ export default function Navbar() {
           <div className="hidden md:flex items-center space-x-8">
             <Link to="/" className="hover:text-primary transition">Home</Link>
             <Link to="/rooms" className="hover:text-primary transition">Rooms</Link>
+            <Link to="/gallery" className="hover:text-primary transition">Gallery</Link>
             <Link to="/contact" className="hover:text-primary transition">Contact</Link>
             <a href="tel:+233246401209" className="flex items-center space-x-1 text-primary">
               <Phone size={18} />
@@ -40,6 +41,7 @@ export default function Navbar() {
           <div className="md:hidden py-4 space-y-4">
             <Link to="/" className="block hover:text-primary" onClick={() => setIsOpen(false)}>Home</Link>
             <Link to="/rooms" className="block hover:text-primary" onClick={() => setIsOpen(false)}>Rooms</Link>
+            <Link to="/gallery" className="block hover:text-primary" onClick={() => setIsOpen(false)}>Gallery</Link>
             <Link to="/contact" className="block hover:text-primary" onClick={() => setIsOpen(false)}>Contact</Link>
             <Link to="/booking" className="block btn-primary text-center" onClick={() => setIsOpen(false)}>Book Now</Link>
           </div>

@@ -5,8 +5,9 @@ export default function AdminRooms() {
   const [rooms, setRooms] = useState([])
   const [editing, setEditing] = useState(null)
   const [formData, setFormData] = useState({
-    name: '', description: '', price: '', max_guests: '', image_url: '', available: true, quantity: 1
+    name: '', description: '', price: '', max_guests: '', image_url: '', images: [], available: true, quantity: 1
   })
+  const [uploadingImage, setUploadingImage] = useState(false)
 
   useEffect(() => {
     fetchRooms()
@@ -41,7 +42,7 @@ export default function AdminRooms() {
         })
       }
       
-      setFormData({ name: '', description: '', price: '', max_guests: '', image_url: '', available: true, quantity: 1 })
+      setFormData({ name: '', description: '', price: '', max_guests: '', image_url: '', images: [], available: true, quantity: 1 })
       setEditing(null)
       fetchRooms()
       alert('Room saved successfully!')
@@ -52,7 +53,30 @@ export default function AdminRooms() {
 
   const handleEdit = (room) => {
     setEditing(room.id)
-    setFormData({...room, quantity: room.quantity || 1})
+    setFormData({...room, quantity: room.quantity || 1, images: room.images || []})
+  }
+
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0]
+    if (!file) return
+
+    if (file.size > 5 * 1024 * 1024) {
+      alert('Image size should be less than 5MB')
+      return
+    }
+
+    setUploadingImage(true)
+    const reader = new FileReader()
+    reader.onloadend = () => {
+      setFormData({ ...formData, images: [...(formData.images || []), reader.result] })
+      setUploadingImage(false)
+    }
+    reader.readAsDataURL(file)
+  }
+
+  const removeImage = (index) => {
+    const newImages = formData.images.filter((_, i) => i !== index)
+    setFormData({ ...formData, images: newImages })
   }
 
   const handleDelete = async (id) => {
@@ -111,11 +135,40 @@ export default function AdminRooms() {
           />
           <input 
             type="text" 
-            placeholder="Image URL"
+            placeholder="Main Image URL (optional)"
             value={formData.image_url}
             onChange={(e) => setFormData({...formData, image_url: e.target.value})}
             className="p-2 border rounded md:col-span-2"
           />
+          <div className="md:col-span-2">
+            <label className="block font-semibold mb-2">Room Images (Upload)</label>
+            <div className="border-2 border-dashed border-gray-300 rounded-lg p-4">
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageUpload}
+                className="mb-2"
+                disabled={uploadingImage}
+              />
+              {uploadingImage && <p className="text-sm text-gray-600">Uploading...</p>}
+              {formData.images && formData.images.length > 0 && (
+                <div className="grid grid-cols-4 gap-2 mt-2">
+                  {formData.images.map((img, index) => (
+                    <div key={index} className="relative">
+                      <img src={img} alt={`Room ${index + 1}`} className="w-full h-20 object-cover rounded" />
+                      <button
+                        type="button"
+                        onClick={() => removeImage(index)}
+                        className="absolute top-0 right-0 bg-red-600 text-white p-1 rounded-full text-xs"
+                      >
+                        ×
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
           <textarea 
             placeholder="Description"
             value={formData.description}
@@ -132,7 +185,7 @@ export default function AdminRooms() {
                 type="button" 
                 onClick={() => {
                   setEditing(null)
-                  setFormData({ name: '', description: '', price: '', max_guests: '', image_url: '', available: true, quantity: 1 })
+                  setFormData({ name: '', description: '', price: '', max_guests: '', image_url: '', images: [], available: true, quantity: 1 })
                 }}
                 className="btn-secondary"
               >
@@ -150,9 +203,14 @@ export default function AdminRooms() {
             <p className="text-gray-600 mb-2">{room.description}</p>
             <div className="text-2xl font-bold text-primary mb-2">GH₵ {room.price}/night</div>
             <div className="text-sm text-gray-600 mb-1">Max Guests: {room.max_guests}</div>
-            <div className="text-sm font-semibold text-green-600 mb-4">
+            <div className="text-sm font-semibold text-green-600 mb-2">
               Available: {room.quantity || 1} room{(room.quantity || 1) > 1 ? 's' : ''}
             </div>
+            {room.images && room.images.length > 0 && (
+              <div className="text-sm text-blue-600 mb-4">
+                📷 {room.images.length} image{room.images.length > 1 ? 's' : ''}
+              </div>
+            )}
             <div className="flex space-x-2">
               <button onClick={() => handleEdit(room)} className="btn-primary text-sm">Edit</button>
               <button onClick={() => handleDelete(room.id)} className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 text-sm">Delete</button>
