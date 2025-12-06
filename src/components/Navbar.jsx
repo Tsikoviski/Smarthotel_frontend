@@ -1,12 +1,13 @@
 import { Link } from 'react-router-dom'
-import { Menu, X, Phone, MessageCircle } from 'lucide-react'
+import { Menu, X, Phone } from 'lucide-react'
 import { useState } from 'react'
+import ThemeToggle from './ThemeToggle'
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
-    <nav className="bg-white shadow-md sticky top-0 z-50">
+    <nav className="bg-white dark:bg-gray-900 shadow-md sticky top-0 z-50 transition-colors">
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center h-16">
           <Link to="/" className="flex items-center space-x-3">
@@ -15,15 +16,16 @@ export default function Navbar() {
           </Link>
 
           {/* Desktop Menu */}
-          <div className="hidden md:flex items-center space-x-8">
-            <Link to="/" className="hover:text-primary transition">Home</Link>
-            <Link to="/rooms" className="hover:text-primary transition">Rooms</Link>
-            <Link to="/gallery" className="hover:text-primary transition">Gallery</Link>
-            <Link to="/contact" className="hover:text-primary transition">Contact</Link>
-            <a href="tel:+233508958731" className="flex items-center space-x-1 text-primary">
+          <div className="hidden md:flex items-center space-x-6">
+            <Link to="/" className="hover:text-primary dark:text-gray-300 dark:hover:text-primary transition">Home</Link>
+            <Link to="/rooms" className="hover:text-primary dark:text-gray-300 dark:hover:text-primary transition">Rooms</Link>
+            <Link to="/gallery" className="hover:text-primary dark:text-gray-300 dark:hover:text-primary transition">Gallery</Link>
+            <Link to="/contact" className="hover:text-primary dark:text-gray-300 dark:hover:text-primary transition">Contact</Link>
+            <a href="tel:+233552612224" className="flex items-center space-x-1 text-primary">
               <Phone size={18} />
-              <span>+233 50 895 8731</span>
+              <span>+233 55 261 2224</span>
             </a>
+            <ThemeToggle />
             <Link to="/booking" className="btn-primary">Book Now</Link>
           </div>
 
@@ -38,11 +40,15 @@ export default function Navbar() {
 
         {/* Mobile Menu */}
         {isOpen && (
-          <div className="md:hidden py-4 space-y-4">
-            <Link to="/" className="block hover:text-primary" onClick={() => setIsOpen(false)}>Home</Link>
-            <Link to="/rooms" className="block hover:text-primary" onClick={() => setIsOpen(false)}>Rooms</Link>
-            <Link to="/gallery" className="block hover:text-primary" onClick={() => setIsOpen(false)}>Gallery</Link>
-            <Link to="/contact" className="block hover:text-primary" onClick={() => setIsOpen(false)}>Contact</Link>
+          <div className="md:hidden py-4 space-y-4 border-t dark:border-gray-700">
+            <Link to="/" className="block hover:text-primary dark:text-gray-300 dark:hover:text-primary" onClick={() => setIsOpen(false)}>Home</Link>
+            <Link to="/rooms" className="block hover:text-primary dark:text-gray-300 dark:hover:text-primary" onClick={() => setIsOpen(false)}>Rooms</Link>
+            <Link to="/gallery" className="block hover:text-primary dark:text-gray-300 dark:hover:text-primary" onClick={() => setIsOpen(false)}>Gallery</Link>
+            <Link to="/contact" className="block hover:text-primary dark:text-gray-300 dark:hover:text-primary" onClick={() => setIsOpen(false)}>Contact</Link>
+            <div className="flex items-center justify-between">
+              <span className="text-sm dark:text-gray-300">Theme</span>
+              <ThemeToggle />
+            </div>
             <Link to="/booking" className="block btn-primary text-center" onClick={() => setIsOpen(false)}>Book Now</Link>
           </div>
         )}

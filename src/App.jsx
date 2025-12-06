@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { ThemeProvider } from './context/ThemeContext'
 import Layout from './components/Layout'
 import Home from './pages/Home'
 import Rooms from './pages/Rooms'
@@ -18,7 +19,8 @@ import Gallery from './pages/Gallery'
 
 function App() {
   return (
-    <Router>
+    <ThemeProvider>
+      <Router>
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
@@ -42,6 +44,7 @@ function App() {
         </Route>
       </Routes>
     </Router>
+    </ThemeProvider>
   )
 }
 
