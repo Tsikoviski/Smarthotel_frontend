@@ -1,5 +1,4 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import { ThemeProvider } from './context/ThemeContext'
 import Layout from './components/Layout'
 import Home from './pages/Home'
 import Rooms from './pages/Rooms'
@@ -16,17 +15,18 @@ import RemovalReasons from './pages/admin/RemovalReasons'
 import Users from './pages/admin/Users'
 import AdminGallery from './pages/admin/Gallery'
 import Gallery from './pages/Gallery'
+import BookingSuccess from './pages/BookingSuccess'
 
 function App() {
   return (
-    <ThemeProvider>
-      <Router>
+    <Router>
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
           <Route path="rooms" element={<Rooms />} />
           <Route path="rooms/:id" element={<RoomDetails />} />
           <Route path="booking" element={<Booking />} />
+          <Route path="booking/success" element={<BookingSuccess />} />
           <Route path="gallery" element={<Gallery />} />
           <Route path="contact" element={<Contact />} />
         </Route>
@@ -44,7 +44,6 @@ function App() {
         </Route>
       </Routes>
     </Router>
-    </ThemeProvider>
   )
 }
 
