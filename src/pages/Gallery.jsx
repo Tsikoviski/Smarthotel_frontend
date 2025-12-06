@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { X } from 'lucide-react'
 import api from '../api/axios'
+import Loading from '../components/Loading'
 
 export default function Gallery() {
   const [images, setImages] = useState([])
@@ -37,7 +38,11 @@ export default function Gallery() {
     : images.filter(img => img.category === filter)
 
   if (loading) {
-    return <div className="container mx-auto px-4 py-16 text-center">Loading gallery...</div>
+    return (
+      <div className="container mx-auto px-4 py-16">
+        <Loading message="Loading gallery" />
+      </div>
+    )
   }
 
   return (

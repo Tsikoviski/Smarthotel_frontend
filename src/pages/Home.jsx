@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { Bed, Utensils, Film, Wind, Shirt, Star, Users, Wifi, Coffee } from 'lucide-react'
 import api from '../api/axios'
+import Loading from '../components/Loading'
 
 export default function Home() {
   const [rooms, setRooms] = useState([])
@@ -153,7 +154,7 @@ export default function Home() {
           <h2 className="text-3xl font-bold text-center mb-12">Our Rooms</h2>
           
           {loading ? (
-            <div className="text-center text-gray-600">Loading rooms...</div>
+            <Loading message="Loading rooms" />
           ) : rooms.length === 0 ? (
             <div className="text-center text-gray-600">No rooms available at the moment</div>
           ) : (

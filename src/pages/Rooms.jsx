@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { Users, Wifi, Coffee, Wind } from 'lucide-react'
 import api from '../api/axios'
+import Loading from '../components/Loading'
 
 export default function Rooms() {
   const [rooms, setRooms] = useState([])
@@ -30,7 +31,11 @@ export default function Rooms() {
   }
 
   if (loading) {
-    return <div className="container mx-auto px-4 py-16 text-center">Loading rooms...</div>
+    return (
+      <div className="container mx-auto px-4 py-16">
+        <Loading message="Loading rooms" />
+      </div>
+    )
   }
 
   return (

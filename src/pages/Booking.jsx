@@ -225,16 +225,34 @@ export default function Booking() {
               )}
 
               <div className="bg-blue-50 p-4 rounded-lg">
-                <div className="flex items-start space-x-2 mb-2">
-                  <CreditCard className="text-primary mt-1" size={20} />
+                <div className="flex items-start space-x-2">
+                  <CreditCard className="text-primary mt-1 flex-shrink-0" size={20} />
                   <div>
-                    <p className="font-semibold text-sm">Payment Methods</p>
-                    <p className="text-xs text-gray-600 mt-1">
-                      MTN Mobile Money<br />
-                      Vodafone Cash<br />
-                      AirtelTigo Money
-                    </p>
+                    <p className="font-semibold text-sm mb-2">Accepted Payment Methods</p>
+                    
+                    {/* Card Payments */}
+                    <div className="mb-3">
+                      <p className="text-xs font-semibold text-gray-700 mb-1">💳 Credit/Debit Cards</p>
+                      <div className="flex items-center space-x-2 text-xs text-gray-600">
+                        <span className="bg-white px-2 py-1 rounded border">Visa</span>
+                        <span className="bg-white px-2 py-1 rounded border">Mastercard</span>
+                      </div>
+                    </div>
+                    
+                    {/* Mobile Money */}
+                    <div>
+                      <p className="text-xs font-semibold text-gray-700 mb-1">📱 Mobile Money</p>
+                      <p className="text-xs text-gray-600">
+                        MTN • Vodafone • AirtelTigo
+                      </p>
+                    </div>
                   </div>
+                </div>
+                
+                <div className="mt-3 pt-3 border-t border-blue-200">
+                  <p className="text-xs text-gray-600">
+                    🔒 Secure payment powered by Paystack
+                  </p>
                 </div>
               </div>
             </div>

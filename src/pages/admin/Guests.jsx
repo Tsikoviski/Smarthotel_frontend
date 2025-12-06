@@ -3,6 +3,7 @@ import api from '../../api/axios'
 import { Plus, X, Trash2, FileText, Share2, Printer, Download, Search } from 'lucide-react'
 import { printThermalReceipt } from '../../utils/thermalPrinter'
 import { downloadPDFReceipt } from '../../utils/pdfReceipt'
+import Loading from '../../components/Loading'
 
 export default function AdminGuests() {
   const [guests, setGuests] = useState([])
@@ -247,7 +248,7 @@ Thank you for choosing Elkad Lodge!
     )
   })
 
-  if (loading) return <div>Loading...</div>
+  if (loading) return <Loading message="Loading guests" />
 
   return (
     <div>

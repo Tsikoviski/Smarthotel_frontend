@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Plus, X, Trash2, Upload } from 'lucide-react'
 import api from '../../api/axios'
+import Loading, { LoadingSpinner } from '../../components/Loading'
 
 export default function AdminGallery() {
   const [images, setImages] = useState([])
@@ -103,7 +104,7 @@ export default function AdminGallery() {
     }
   }
 
-  if (loading) return <div>Loading...</div>
+  if (loading) return <Loading message="Loading gallery" />
 
   return (
     <div>
@@ -241,9 +242,16 @@ export default function AdminGallery() {
               <button
                 type="submit"
                 disabled={uploading || !formData.image_data}
-                className="btn-primary w-full disabled:opacity-50"
+                className="btn-primary w-full disabled:opacity-50 flex items-center justify-center space-x-2"
               >
-                {uploading ? 'Uploading...' : 'Upload Image'}
+                {uploading ? (
+                  <>
+                    <LoadingSpinner size="sm" />
+                    <span>Uploading...</span>
+                  </>
+                ) : (
+                  <span>Upload Image</span>
+                )}
               </button>
             </form>
           </div>

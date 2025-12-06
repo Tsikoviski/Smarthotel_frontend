@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { Users, Wifi, Coffee, Wind, Utensils, Film, Shirt } from 'lucide-react'
 import api from '../api/axios'
+import Loading from '../components/Loading'
 
 export default function RoomDetails() {
   const { id } = useParams()
@@ -72,11 +73,19 @@ export default function RoomDetails() {
   }
 
   if (loading) {
-    return <div className="container mx-auto px-4 py-16 text-center">Loading...</div>
+    return (
+      <div className="container mx-auto px-4 py-16">
+        <Loading message="Loading room details" />
+      </div>
+    )
   }
 
   if (!room) {
-    return <div className="container mx-auto px-4 py-16 text-center">Room not found</div>
+    return (
+      <div className="container mx-auto px-4 py-16 text-center">
+        <div className="text-xl text-gray-600">Room not found</div>
+      </div>
+    )
   }
 
   const amenities = [

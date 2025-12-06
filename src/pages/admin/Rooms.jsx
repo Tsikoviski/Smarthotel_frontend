@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import api from '../../api/axios'
+import { LoadingSpinner } from '../../components/Loading'
 
 export default function AdminRooms() {
   const [rooms, setRooms] = useState([])
@@ -179,7 +180,12 @@ export default function AdminRooms() {
                 multiple
               />
               <p className="text-xs text-gray-500 mb-2">Select multiple images (up to 10MB each)</p>
-              {uploadingImage && <p className="text-sm text-blue-600">Uploading images...</p>}
+              {uploadingImage && (
+                <div className="flex items-center space-x-2 text-blue-600">
+                  <LoadingSpinner size="sm" />
+                  <span className="text-sm">Uploading images...</span>
+                </div>
+              )}
               {formData.images && formData.images.length > 0 && (
                 <div className="grid grid-cols-4 gap-2 mt-2">
                   {formData.images.map((img, index) => (
