@@ -1,14 +1,19 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import api from '../../api/axios'
+import { LoadingOverlay } from '../../components/Loading'
 
 export default function AdminLogin() {
   const navigate = useNavigate()
   const [credentials, setCredentials] = useState({ username: '', password: '' })
   const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    setError('')
+    setLoading(true)
+    
     try {
       const response = await api.post('/api/admin/login', credentials)
       localStorage.setItem('admin', JSON.stringify(response.data.admin))
@@ -22,12 +27,15 @@ export default function AdminLogin() {
       }
     } catch (err) {
       setError('Invalid credentials')
+      setLoading(false)
     }
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-      <div className="card p-8 w-full max-w-md">
+    <>
+      {loading && <LoadingOverlay message="Logging in" />}
+      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+        <div className="card p-8 w-full max-w-md">
         <div className="flex justify-center mb-6">
           <img src="/logo.png" alt="Elkad Lodge" className="h-32 w-auto" />
         </div>
@@ -58,5 +66,6 @@ export default function AdminLogin() {
         </form>
       </div>
     </div>
+    </>
   )
 }

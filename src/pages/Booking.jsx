@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Calendar, Users, CreditCard } from 'lucide-react'
 import api from '../api/axios'
+import { LoadingOverlay } from '../components/Loading'
 
 export default function Booking() {
   const location = useLocation()
@@ -73,9 +74,11 @@ export default function Booking() {
   }
 
   return (
-    <div className="py-16 bg-gray-50">
-      <div className="container mx-auto px-4 max-w-4xl">
-        <h1 className="text-4xl font-bold text-center mb-8">Book Your Stay</h1>
+    <>
+      {loading && <LoadingOverlay message="Processing your booking" />}
+      <div className="py-16 bg-gray-50">
+        <div className="container mx-auto px-4 max-w-4xl">
+          <h1 className="text-4xl font-bold text-center mb-8">Book Your Stay</h1>
 
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Booking Form */}
@@ -260,5 +263,6 @@ export default function Booking() {
         </div>
       </div>
     </div>
+    </>
   )
 }

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Trash2, Search, X } from 'lucide-react'
 import api from '../../api/axios'
+import Loading from '../../components/Loading'
 
 export default function AdminBookings() {
   const [bookings, setBookings] = useState([])
@@ -81,7 +82,7 @@ export default function AdminBookings() {
     )
   })
 
-  if (loading) return <div>Loading...</div>
+  if (loading) return <Loading message="Loading bookings" />
 
   return (
     <div>
