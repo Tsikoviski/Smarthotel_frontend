@@ -20,6 +20,8 @@ export default function Booking() {
   const [totalCost, setTotalCost] = useState(0)
   const [nights, setNights] = useState(0)
   const [loading, setLoading] = useState(false)
+  const [paymentOption, setPaymentOption] = useState('full') // full, partial, later
+  const [nightsToPay, setNightsToPay] = useState(1)
 
   useEffect(() => {
     fetchRooms()
@@ -58,11 +60,23 @@ export default function Booking() {
     setLoading(true)
 
     try {
-      const response = await api.post('/api/bookings', formData)
-      const { booking, paymentUrl } = response.data
+      const bookingData = {
+        ...formData,
+        paymentOption,
+        nightsToPay: paymentOption === 'partial' ? nightsToPay : nights
+      }
+
+      const response = await api.post('/api/bookings', bookingData)
       
-      // Redirect to Paystack payment page in the same window
-      window.location.replace(paymentUrl)
+      if (paymentOption === 'later') {
+        // Reservation without payment
+        alert('Reservation confirmed! Please pay at the lodge upon arrival.')
+        navigate('/')
+      } else {
+        // Redirect to payment
+        const { paymentUrl } = response.data
+        window.location.replace(paymentUrl)
+      }
     } catch (error) {
       alert('Booking failed: ' + (error.response?.data?.error || error.message))
       setLoading(false)
@@ -182,12 +196,92 @@ export default function Booking() {
                 />
               </div>
 
+              {/* Payment Options */}
+              <div className="mb-6 p-4 bg-gray-50 rounded-lg">
+                <label className="block font-semibold mb-3">Payment Option *</label>
+                
+                <div className="space-y-3">
+                  {/* Pay Full Amount */}
+                  <label className="flex items-start space-x-3 cursor-pointer">
+                    <input
+                      type="radio"
+                      name="paymentOption"
+                      value="full"
+                      checked={paymentOption === 'full'}
+                      onChange={(e) => setPaymentOption(e.target.value)}
+                      className="mt-1"
+                    />
+                    <div>
+                      <div className="font-semibold">Pay Full Amount Now</div>
+                      <div className="text-sm text-gray-600">
+                        Pay GH₵ {totalCost} for {nights} night{nights > 1 ? 's' : ''}
+                      </div>
+                    </div>
+                  </label>
+
+                  {/* Pay Partial */}
+                  {nights > 1 && (
+                    <label className="flex items-start space-x-3 cursor-pointer">
+                      <input
+                        type="radio"
+                        name="paymentOption"
+                        value="partial"
+                        checked={paymentOption === 'partial'}
+                        onChange={(e) => setPaymentOption(e.target.value)}
+                        className="mt-1"
+                      />
+                      <div className="flex-1">
+                        <div className="font-semibold">Pay for Specific Nights</div>
+                        <div className="text-sm text-gray-600 mb-2">
+                          Choose how many nights to pay for now
+                        </div>
+                        {paymentOption === 'partial' && (
+                          <div className="flex items-center space-x-2">
+                            <input
+                              type="number"
+                              min="1"
+                              max={nights}
+                              value={nightsToPay}
+                              onChange={(e) => setNightsToPay(parseInt(e.target.value))}
+                              className="w-20 p-2 border rounded"
+                            />
+                            <span className="text-sm">
+                              night{nightsToPay > 1 ? 's' : ''} = GH₵ {(totalCost / nights * nightsToPay).toFixed(2)}
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                    </label>
+                  )}
+
+                  {/* Pay Later */}
+                  <label className="flex items-start space-x-3 cursor-pointer">
+                    <input
+                      type="radio"
+                      name="paymentOption"
+                      value="later"
+                      checked={paymentOption === 'later'}
+                      onChange={(e) => setPaymentOption(e.target.value)}
+                      className="mt-1"
+                    />
+                    <div>
+                      <div className="font-semibold">Reserve Without Payment</div>
+                      <div className="text-sm text-gray-600">
+                        Pay at the lodge upon arrival
+                      </div>
+                    </div>
+                  </label>
+                </div>
+              </div>
+
               <button 
                 type="submit"
                 disabled={loading || !totalCost}
                 className="btn-primary w-full text-lg py-4 disabled:opacity-50"
               >
-                {loading ? 'Processing...' : 'Proceed to Payment'}
+                {loading ? 'Processing...' : 
+                 paymentOption === 'later' ? 'Confirm Reservation' : 
+                 'Proceed to Payment'}
               </button>
             </form>
           </div>
@@ -217,10 +311,30 @@ export default function Booking() {
                   </div>
 
                   <div className="border-t pt-4 mb-6">
-                    <div className="flex justify-between items-center">
-                      <span className="text-lg font-semibold">Total:</span>
-                      <span className="text-2xl font-bold text-primary">GH₵ {totalCost}</span>
+                    <div className="flex justify-between items-center mb-2">
+                      <span className="text-sm text-gray-600">Total Cost:</span>
+                      <span className="text-lg font-semibold">GH₵ {totalCost}</span>
                     </div>
+                    {paymentOption === 'partial' && (
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-sm text-gray-600">Paying for {nightsToPay} night{nightsToPay > 1 ? 's' : ''}:</span>
+                        <span className="text-lg font-semibold text-green-600">
+                          GH₵ {(totalCost / nights * nightsToPay).toFixed(2)}
+                        </span>
+                      </div>
+                    )}
+                    {paymentOption === 'later' && (
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm text-gray-600">Pay at Lodge:</span>
+                        <span className="text-lg font-semibold text-blue-600">GH₵ {totalCost}</span>
+                      </div>
+                    )}
+                    {paymentOption === 'full' && (
+                      <div className="flex justify-between items-center">
+                        <span className="text-lg font-semibold">Amount to Pay:</span>
+                        <span className="text-2xl font-bold text-primary">GH₵ {totalCost}</span>
+                      </div>
+                    )}
                   </div>
                 </>
               ) : (
