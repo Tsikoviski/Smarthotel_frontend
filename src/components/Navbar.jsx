@@ -20,12 +20,11 @@ export default function Navbar() {
             <Link to="/rooms" className="hover:text-primary transition">Rooms</Link>
             <Link to="/gallery" className="hover:text-primary transition">Gallery</Link>
             <Link to="/contact" className="hover:text-primary transition">Contact</Link>
-            <Link to="/booking" className="hover:text-primary transition font-semibold">Make Reservation</Link>
             <a href="tel:+233552612224" className="flex items-center space-x-1 text-primary">
               <Phone size={18} />
               <span>+233 55 261 2224</span>
             </a>
-            <Link to="/admin/login" className="btn-secondary">Admin Login</Link>
+            <Link to="/booking" className="btn-primary">Book Now</Link>
           </div>
 
           {/* Mobile Menu Button */}
@@ -44,8 +43,7 @@ export default function Navbar() {
             <Link to="/rooms" className="block hover:text-primary" onClick={() => setIsOpen(false)}>Rooms</Link>
             <Link to="/gallery" className="block hover:text-primary" onClick={() => setIsOpen(false)}>Gallery</Link>
             <Link to="/contact" className="block hover:text-primary" onClick={() => setIsOpen(false)}>Contact</Link>
-            <Link to="/booking" className="block btn-primary text-center" onClick={() => setIsOpen(false)}>Make Reservation</Link>
-            <Link to="/admin/login" className="block btn-secondary text-center" onClick={() => setIsOpen(false)}>Admin Login</Link>
+            <Link to="/booking" className="block btn-primary text-center" onClick={() => setIsOpen(false)}>Book Now</Link>
           </div>
         )}
       </div>
