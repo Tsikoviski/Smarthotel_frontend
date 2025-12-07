@@ -61,8 +61,8 @@ export default function Booking() {
       const response = await api.post('/api/bookings', formData)
       const { booking, paymentUrl } = response.data
       
-      // Redirect to Paystack payment page
-      window.location.href = paymentUrl
+      // Redirect to Paystack payment page in the same window
+      window.location.replace(paymentUrl)
     } catch (error) {
       alert('Booking failed: ' + (error.response?.data?.error || error.message))
       setLoading(false)
