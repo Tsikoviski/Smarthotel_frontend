@@ -38,9 +38,14 @@ export default function RoomDetails() {
   const fetchRoom = async () => {
     try {
       const response = await api.get(`/api/rooms/${id}`)
-      setRoom(response.data)
+      if (response.data) {
+        setRoom(response.data)
+      } else {
+        setRoom(null)
+      }
     } catch (error) {
       console.error('Error fetching room:', error)
+      setRoom(null)
     } finally {
       setLoading(false)
     }
@@ -52,7 +57,9 @@ export default function RoomDetails() {
     setCheckingAvailability(true)
     try {
       const response = await api.get(`/api/rooms/${id}?checkIn=${checkIn}&checkOut=${checkOut}`)
-      setRoom(response.data)
+      if (response.data) {
+        setRoom(response.data)
+      }
     } catch (error) {
       console.error('Error checking availability:', error)
     } finally {

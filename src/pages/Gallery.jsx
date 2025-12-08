@@ -23,19 +23,24 @@ export default function Gallery() {
   const fetchGallery = async () => {
     try {
       const response = await api.get('/api/admin/gallery')
-      setImages(response.data)
+      if (response.data && Array.isArray(response.data)) {
+        setImages(response.data)
+      } else {
+        setImages([])
+      }
     } catch (error) {
       console.error('Error fetching gallery:', error)
+      setImages([])
     } finally {
       setLoading(false)
     }
   }
 
-  const categories = ['all', ...new Set(images.map(img => img.category))]
+  const categories = ['all', ...new Set(images.map(img => img.category || 'general'))]
   
   const filteredImages = filter === 'all' 
     ? images 
-    : images.filter(img => img.category === filter)
+    : images.filter(img => (img.category || 'general') === filter)
 
   if (loading) {
     return (
