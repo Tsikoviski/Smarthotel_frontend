@@ -34,9 +34,14 @@ export default function Booking() {
   const fetchRooms = async () => {
     try {
       const response = await api.get('/api/rooms')
-      setRooms(response.data)
+      if (response.data && Array.isArray(response.data)) {
+        setRooms(response.data)
+      } else {
+        setRooms([])
+      }
     } catch (error) {
       console.error('Error fetching rooms:', error)
+      setRooms([])
     }
   }
 

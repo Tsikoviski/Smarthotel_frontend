@@ -48,9 +48,14 @@ export default function Home() {
     try {
       const response = await api.get('/api/rooms')
       // Get top 3 rooms for homepage display
-      setRooms(response.data.slice(0, 3))
+      if (response.data && Array.isArray(response.data)) {
+        setRooms(response.data.slice(0, 3))
+      } else {
+        setRooms([])
+      }
     } catch (error) {
       console.error('Error fetching rooms:', error)
+      setRooms([])
     } finally {
       setLoading(false)
     }
@@ -59,11 +64,14 @@ export default function Home() {
   const fetchGalleryImages = async () => {
     try {
       const response = await api.get('/api/admin/gallery')
-      if (response.data && response.data.length > 0) {
+      if (response.data && Array.isArray(response.data) && response.data.length > 0) {
         setGalleryImages(response.data)
+      } else {
+        setGalleryImages([])
       }
     } catch (error) {
       console.error('Error fetching gallery images:', error)
+      setGalleryImages([])
     }
   }
 
