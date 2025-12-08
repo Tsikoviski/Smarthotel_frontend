@@ -129,7 +129,7 @@ export default function BookingSuccess() {
           <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
             <p className="text-sm text-red-800">
               <strong>Need Help?</strong><br />
-              Contact us at +233 55 261 2224 or elkadlodge@gmail.com
+              Contact us at +233 30 321 7656 or Smarthotel24@gmail.com
             </p>
           </div>
 

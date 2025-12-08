@@ -10,8 +10,8 @@ export default function Navbar() {
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center h-16">
           <Link to="/" className="flex items-center space-x-3">
-            <img src="/logo.png" alt="Elkad Lodge" className="h-10 w-auto" />
-            <div className="text-2xl font-bold text-primary">Elkad Lodge</div>
+            <img src="/logo.png" alt="Smart Hotel" className="h-10 w-auto" />
+            <div className="text-2xl font-bold text-primary">Smart Hotel</div>
           </Link>
 
           {/* Desktop Menu */}
@@ -20,9 +20,9 @@ export default function Navbar() {
             <Link to="/rooms" className="hover:text-primary transition">Rooms</Link>
             <Link to="/gallery" className="hover:text-primary transition">Gallery</Link>
             <Link to="/contact" className="hover:text-primary transition">Contact</Link>
-            <a href="tel:+233552612224" className="flex items-center space-x-1 text-primary">
+            <a href="tel:+233303217656" className="flex items-center space-x-1 text-primary">
               <Phone size={18} />
-              <span>+233 55 261 2224</span>
+              <span>+233 30 321 7656</span>
             </a>
             <Link to="/booking" className="btn-primary">Book Now</Link>
           </div>

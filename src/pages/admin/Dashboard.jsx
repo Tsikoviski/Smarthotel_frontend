@@ -56,7 +56,7 @@ export default function AdminDashboard() {
       <nav className="bg-white shadow-md">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <div className="flex items-center space-x-4">
-            <img src="/logo.png" alt="Elkad Lodge" className="h-12 w-auto" />
+            <img src="/logo.png" alt="Smart Hotel" className="h-12 w-auto" />
             <div>
               <h1 className="text-2xl font-bold text-primary">
                 {userRole === 'manager' ? 'Manager' : 'Admin'} Dashboard

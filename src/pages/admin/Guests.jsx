@@ -159,7 +159,7 @@ export default function AdminGuests() {
     
     const receipt = `
 ╔════════════════════════════════════════╗
-║         ELKAD LODGE RECEIPT            ║
+║         SMART HOTEL RECEIPT            ║
 ╚════════════════════════════════════════╝
 
 Guest Information:
@@ -187,12 +187,13 @@ Added by:       ${guest.added_by}
 Date:           ${new Date(guest.created_at).toLocaleString()}
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Contact: +233 55 261 2224
-Email: elkadlodge@gmail.com
-Location: Sewua - Awiem, Kumasi
+Contact: +233 30 321 7656 / +233 248 724 661
+Email: Smarthotel24@gmail.com
+Location: Community 6, SOS Road, Tema
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Thank you for choosing Elkad Lodge!
+Thank you for choosing Smart Hotel!
+True serenity for smart people.
     `
     return receipt
   }

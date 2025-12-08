@@ -15,7 +15,12 @@ export default function Contact() {
                 <MapPin className="text-primary mt-1 flex-shrink-0" size={24} />
                 <div>
                   <h3 className="font-semibold mb-1">Location</h3>
-                  <p className="text-gray-600">Sewua - Awiem near Awiem chief palace<br />Kumasi, Ghana</p>
+                  <p className="text-gray-600">
+                    Community 6, SOS Road<br />
+                    Near Tema Parents School<br />
+                    Caique Junction, Tema, Ghana<br />
+                    <span className="text-primary font-medium">MX3H+PGP Smart Hotel, Tema</span>
+                  </p>
                 </div>
               </div>
 
@@ -24,7 +29,9 @@ export default function Contact() {
                 <div>
                   <h3 className="font-semibold mb-1">Phone</h3>
                   <p className="text-gray-600">
-                    <a href="tel:+233552612224" className="hover:text-primary">+233 55 261 2224</a>
+                    <a href="tel:+233303217656" className="hover:text-primary">+233 30 321 7656</a><br />
+                    <a href="tel:+233303319430" className="hover:text-primary">+233 30 331 9430</a><br />
+                    <a href="tel:+233248724661" className="hover:text-primary">+233 248 724 661</a>
                   </p>
                 </div>
               </div>
@@ -34,7 +41,7 @@ export default function Contact() {
                 <div>
                   <h3 className="font-semibold mb-1">Email</h3>
                   <p className="text-gray-600">
-                    <a href="mailto:elkadlodge@gmail.com" className="hover:text-primary">elkadlodge@gmail.com</a>
+                    <a href="mailto:Smarthotel24@gmail.com" className="hover:text-primary">Smarthotel24@gmail.com</a>
                   </p>
                 </div>
               </div>
@@ -44,7 +51,7 @@ export default function Contact() {
                 <div>
                   <h3 className="font-semibold mb-1">WhatsApp</h3>
                   <p className="text-gray-600">
-                    <a href="https://wa.me/233552612224" target="_blank" rel="noopener noreferrer" className="hover:text-primary">+233 55 261 2224</a>
+                    <a href="https://wa.me/233248724661" target="_blank" rel="noopener noreferrer" className="hover:text-primary">+233 248 724 661</a>
                   </p>
                 </div>
               </div>
@@ -64,7 +71,7 @@ export default function Contact() {
                 <h3 className="font-semibold mb-3">Follow Us</h3>
                 <div className="flex space-x-4">
                   <a 
-                    href="https://instagram.com/elkadlodge" 
+                    href="https://instagram.com/smarthotel" 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="bg-primary text-white p-3 rounded-full hover:bg-primary/90 transition"
@@ -72,7 +79,7 @@ export default function Contact() {
                     <Instagram size={24} />
                   </a>
                   <a 
-                    href="https://facebook.com/elkadlodge" 
+                    href="https://facebook.com/smarthotel" 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="bg-primary text-white p-3 rounded-full hover:bg-primary/90 transition"
@@ -88,19 +95,19 @@ export default function Contact() {
           <div>
             <div className="rounded-lg overflow-hidden h-96 shadow-lg">
               <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3962.5!2d-1.533718!3d6.639679!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNsKwMzgnMjIuOCJOIDHCsDMyJzAxLjQiVw!5e0!3m2!1sen!2sgh!4v1234567890"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3970.7!2d0.0297!3d5.6297!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNcKwMzcnNDYuOSJOIDDCsDAxJzQ2LjkiRQ!5e0!3m2!1sen!2sgh!4v1234567890"
                 width="100%"
                 height="100%"
                 style={{ border: 0 }}
                 allowFullScreen=""
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
-                title="Elkad Lodge Location"
+                title="Smart Hotel Location - MX3H+PGP, Tema"
               ></iframe>
             </div>
             <div className="mt-4 text-center">
               <a 
-                href="https://maps.app.goo.gl/GMZ6iJKN2sWS1KXR8" 
+                href="https://maps.google.com/?q=MX3H+PGP+Smart+Hotel+Tema" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="btn-primary inline-flex items-center space-x-2"

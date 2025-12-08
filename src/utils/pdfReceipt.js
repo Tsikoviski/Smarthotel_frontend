@@ -158,10 +158,10 @@ export function downloadPDFReceipt(guest) {
     <body>
       <div class="receipt-container">
         <div class="receipt-header">
-          <div class="hotel-name">ELKAD LODGE</div>
-          <div class="hotel-info">Sewua - Awiem, Kumasi, Ghana</div>
-          <div class="hotel-info">Phone: +233 55 261 2224</div>
-          <div class="hotel-info">Email: elkadlodge@gmail.com</div>
+          <div class="hotel-name">SMART HOTEL</div>
+          <div class="hotel-info">Community 6, SOS Road, Tema, Ghana</div>
+          <div class="hotel-info">Phone: +233 30 321 7656 / +233 30 331 9430 / +233 248 724 661</div>
+          <div class="hotel-info">Email: Smarthotel24@gmail.com</div>
         </div>
         
         <div class="receipt-title">Guest Receipt</div>
@@ -257,8 +257,8 @@ export function downloadPDFReceipt(guest) {
         </div>
         
         <div class="receipt-footer">
-          <div class="footer-message">Thank you for choosing Elkad Lodge!</div>
-          <div class="footer-note">We hope you enjoyed your stay and look forward to welcoming you again.</div>
+          <div class="footer-message">Thank you for choosing Smart Hotel!</div>
+          <div class="footer-note">True serenity for smart people. We hope you enjoyed your stay and look forward to welcoming you again.</div>
           <div class="footer-note" style="margin-top: 20px;">
             This is a computer-generated receipt and does not require a signature.
           </div>

@@ -84,7 +84,7 @@ export default function Home() {
                 >
                   <img
                     src={image.image_data}
-                    alt={image.title || 'Elkad Lodge'}
+                    alt={image.title || 'Smart Hotel'}
                     className="w-full h-full object-cover"
                   />
                 </div>
@@ -100,8 +100,8 @@ export default function Home() {
         {/* Hero Content */}
         <div className="relative container mx-auto px-4 h-full flex items-center">
           <div className="max-w-2xl text-white">
-            <h1 className="text-5xl font-bold mb-4 drop-shadow-lg">Welcome to Elkad Lodge</h1>
-            <p className="text-xl mb-8 drop-shadow-md">Experience premium comfort in the heart of Kumasi. Your home away from home.</p>
+            <h1 className="text-5xl font-bold mb-4 drop-shadow-lg">Welcome to Smart Hotel</h1>
+            <p className="text-xl mb-8 drop-shadow-md">True serenity for smart people. Experience premium comfort in Tema. Your home away from home.</p>
             <div className="flex space-x-4">
               <Link to="/booking" className="bg-white text-primary px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition shadow-lg">
                 Book Now
@@ -261,7 +261,7 @@ export default function Home() {
       <section className="py-16 bg-primary text-white">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl font-bold mb-4">Ready to Book Your Stay?</h2>
-          <p className="text-xl mb-8">Experience the best hospitality in Kumasi. Book now and pay with Mobile Money!</p>
+          <p className="text-xl mb-8">Experience the best hospitality in Tema. Book now and pay with Mobile Money!</p>
           <Link to="/booking" className="bg-white text-primary px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition inline-block">
             Book Your Room
           </Link>
