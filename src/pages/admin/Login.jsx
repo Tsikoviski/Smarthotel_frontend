@@ -15,7 +15,9 @@ export default function AdminLogin() {
     setLoading(true)
     
     try {
+      console.log('Attempting login to:', api.defaults.baseURL)
       const response = await api.post('/api/admin/login', credentials)
+      console.log('Login successful:', response.data)
       localStorage.setItem('admin', JSON.stringify(response.data.admin))
       localStorage.setItem('adminAuth', btoa(`${credentials.username}:${credentials.password}`))
       
@@ -26,7 +28,11 @@ export default function AdminLogin() {
         navigate('/admin')
       }
     } catch (err) {
-      setError('Invalid credentials')
+      console.error('Login error:', err)
+      console.error('Error response:', err.response?.data)
+      console.error('Error status:', err.response?.status)
+      const errorMsg = err.response?.data?.error || err.message || 'Login failed'
+      setError(errorMsg)
       setLoading(false)
     }
   }
