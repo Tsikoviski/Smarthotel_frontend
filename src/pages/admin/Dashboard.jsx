@@ -56,7 +56,16 @@ export default function AdminDashboard() {
       <nav className="bg-white shadow-md">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <div className="flex items-center space-x-4">
-            <div className="w-12 h-12 bg-gradient-to-br from-primary to-secondary rounded-lg flex items-center justify-center">
+            <img 
+              src="/logo.png" 
+              alt="Smart Hotel Logo" 
+              className="h-12 w-12 object-contain"
+              onError={(e) => {
+                e.target.style.display = 'none'
+                e.target.nextSibling.style.display = 'flex'
+              }}
+            />
+            <div className="w-12 h-12 bg-gradient-to-br from-primary to-secondary rounded-lg items-center justify-center hidden">
               <span className="text-white font-bold text-xl">SH</span>
             </div>
             <div>

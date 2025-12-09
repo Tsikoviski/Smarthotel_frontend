@@ -43,7 +43,16 @@ export default function AdminLogin() {
       <div className="min-h-screen bg-gray-100 flex items-center justify-center">
         <div className="card p-8 w-full max-w-md">
         <div className="flex justify-center mb-6">
-          <div className="w-32 h-32 bg-gradient-to-br from-primary to-secondary rounded-2xl flex items-center justify-center shadow-xl">
+          <img 
+            src="/logo.png" 
+            alt="Smart Hotel Logo" 
+            className="h-32 w-32 object-contain"
+            onError={(e) => {
+              e.target.style.display = 'none'
+              e.target.nextSibling.style.display = 'flex'
+            }}
+          />
+          <div className="w-32 h-32 bg-gradient-to-br from-primary to-secondary rounded-2xl items-center justify-center shadow-xl hidden">
             <span className="text-white font-bold text-5xl">SH</span>
           </div>
         </div>
